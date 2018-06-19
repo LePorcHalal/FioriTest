@@ -33,7 +33,7 @@
 					<smartTable:customToolbar>
 						<OverflowToolbar design="Transparent">
 							<ToolbarSpacer/>
-							<!--<OverflowToolbarButton icon="sap-icon://delete" text="{i18n>delete}" press="onDelete"/>-->
+							<OverflowToolbarButton icon="sap-icon://delete" text="{i18n>delete}" press="onDelete"/>
 							<OverflowToolbarButton icon="sap-icon://add" text="{i18n>create}" press="onAdd" enabled="{appView>addEnabled}"/>
 						</OverflowToolbar>
 					</smartTable:customToolbar>
