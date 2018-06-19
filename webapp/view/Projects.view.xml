@@ -118,7 +118,7 @@
 			</VBox>
 		</semantic:content>
 			<semantic:customFooterContent>
-				<Button text="SAVE" press="onSave" />
+				<Button text="SAVE" press="handleConfirmationMessageBoxPress" />
 				<Button text="CANCEL"/>
 				</semantic:customFooterContent>
 	</semantic:SemanticPage>
