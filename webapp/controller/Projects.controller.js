@@ -10,9 +10,11 @@ sap.ui.define([
 	"sap/m/MessageBox",
 	"com/beyondtechnologies/model/grouper",
 	"com/beyondtechnologies/model/GroupSortState",
+	"sap/m/MessageToast",
 	"sap/ui/commons/MessageBox"
+	
 ], function(BaseController, JSONModel, Filter, FilterOperator, GroupHeaderListItem, Device, formatter, MessageBox, grouper,
-	GroupSortState) {
+	GroupSortState, MessageToast) {
 	"use strict";
 
 	return BaseController.extend("com.beyondtechnologies.controller.Projects", {
@@ -314,6 +316,24 @@ sap.ui.define([
 		 */
 		_fnGetPathWithSlash: function(sPath) {
 			return (sPath.indexOf("/") === 0 ? "" : "/") + sPath;
+		},
+		
+			onDelete: function() {
+			var that = this;
+			var oViewModel = this.getModel("detailView"),
+				sPath = oViewModel.getProperty("/sObjectPath"),
+				sObjectHeader = this._oODataModel.getProperty(sPath + "/NAME"),
+				sQuestion = this._oResourceBundle.getText("deleteText", sObjectHeader),
+				sSuccessMessage = this._oResourceBundle.getText("deleteSuccess", sObjectHeader);
+
+			var fnMyAfterDeleted = function() {
+				oViewModel.setProperty("/busy", false);
+				that.onNavBack();
+				MessageToast.show(sSuccessMessage);
+			};
+			this._confirmDeletionByUser({
+				question: sQuestion
+			}, [sPath], fnMyAfterDeleted);
 		},
 
 		/**
