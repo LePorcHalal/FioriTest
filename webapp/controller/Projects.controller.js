@@ -9,7 +9,8 @@ sap.ui.define([
 	"com/beyondtechnologies/model/formatter",
 	"sap/m/MessageBox",
 	"com/beyondtechnologies/model/grouper",
-	"com/beyondtechnologies/model/GroupSortState"
+	"com/beyondtechnologies/model/GroupSortState",
+	"sap/ui/commons/MessageBox"
 ], function(BaseController, JSONModel, Filter, FilterOperator, GroupHeaderListItem, Device, formatter, MessageBox, grouper,
 	GroupSortState) {
 	"use strict";
@@ -29,9 +30,19 @@ sap.ui.define([
 		onInit: function() {
 			
 			
-			var that = this;
-			this._oODataModel = this.getOwnerComponent().getModel();
+			
+			var oTable = this.byId("ProjectsSmartTable"),
+				oViewModel = this._createViewModel(),
+				// Put down smart table's original value for busy indicator delay,
+				// so it can be restored later on. Busy handling on the smart table is
+				// taken care of by the smart table itself.
+			iOriginalBusyDelay = oTable.getBusyIndicatorDelay();
+			this._oTableSelector = this.getOwnerComponent().oTableSelector;
+			this._oGroupSortState = new GroupSortState(oViewModel, grouper.GRAND_TOTAL(this.getResourceBundle()));
 			this._oResourceBundle = this.getResourceBundle();
+			this._oTable = oTable;
+			// keeps the filter and search state
+
 			this._oViewModel = new JSONModel({
 				enableCreate: false,
 				delay: 0,
@@ -39,51 +50,25 @@ sap.ui.define([
 				mode: "edit",
 				viewTitle: ""
 			});
-			this.setModel(this._oViewModel, "viewModel");
-
-			// Register the view with the message manager
-			sap.ui.getCore().getMessageManager().registerObject(this.getView(), true);
-			var oMessagesModel = sap.ui.getCore().getMessageManager().getMessageModel();
-			this._oBinding = new sap.ui.model.Binding(oMessagesModel, "/", oMessagesModel.getContext("/"));
-			this._oBinding.attachChange(function(oEvent) {
-				var aMessages = oEvent.getSource().getModel().getData();
-				for (var i = 0; i < aMessages.length; i++) {
-					if (aMessages[i].type === "Error" && !aMessages[i].technical) {
-						that._oViewModel.setProperty("/enableCreate", false);
-					}
-				}
-			});
+			this.setModel(this._oViewModel, "projectsView");
 			
-			var oTable = this.byId("ProjectsSmartTable"),
-			//	oViewModel = this._createViewModel(),
-				// Put down smart table's original value for busy indicator delay,
-				// so it can be restored later on. Busy handling on the smart table is
-				// taken care of by the smart table itself.
-				iOriginalBusyDelay = oTable.getBusyIndicatorDelay();
-			this._oTableSelector = this.getOwnerComponent().oTableSelector;
-		//	this._oGroupSortState = new GroupSortState(oViewModel, grouper.GRAND_TOTAL(this.getResourceBundle()));
 			
-			this._oTable = oTable;
-			// keeps the filter and search state
-			this._oTableFilterState = {
-				aFilter: [],
-				aSearch: []
-			};
-
-	//		this.setModel(oViewModel, "projectsView");
+			
+			
+			
 			// Make sure, busy indication is showing immediately so there is no
 			// break after the busy indication for loading the view's meta data is
 			// ended (see promise 'oWhenMetadataIsLoaded' in AppController)
-	//		oTable.attachEventOnce("updateFinished", function() {
+			oTable.attachEventOnce("updateFinished", function() {
 				// Restore original busy indicator delay for the list
-	//			oViewModel.setProperty("/tableBusyDelay", iOriginalBusyDelay);
-	//		});
+				oViewModel.setProperty("/tableBusyDelay", iOriginalBusyDelay);
+			});
 
 			this.getRouter().attachBypassed(this.onBypassed, this);
 			this._oODataModel = this.getOwnerComponent().getModel();
 			this.setInitialSortOrder();
-			
-			
+		
+		
 		},
 		
 		
@@ -114,54 +99,6 @@ sap.ui.define([
 			this._oTable.getBinding("items").refresh();
 		},
 
-
-		_checkIfBatchRequestSucceeded: function(oEvent) {
-			var oParams = oEvent.getParameters();
-			var aRequests = oEvent.getParameters().requests;
-			var oRequest;
-			if (oParams.success) {
-				if (aRequests) {
-					for (var i = 0; i < aRequests.length; i++) {
-						oRequest = oEvent.getParameters().requests[i];
-						if (!oRequest.success) {
-							return false;
-						}
-					}
-				}
-				return true;
-			} else {
-				return false;
-			}
-		},
-		onSave: function(){
-			
-				var that = this,
-				oModel = this.getModel();
-			// abort if the  model has not been changed
-			if (!oModel.hasPendingChanges()) {
-				MessageBox.information(
-					this._oResourceBundle.getText("noChangesMessage"), {
-						id: "noChangesInfoMessageBox",
-						styleClass: that.getOwnerComponent().getContentDensityClass()
-					}
-				);
-				return;
-			}
-			this.getModel("appView").setProperty("/busy", true);
-			if (this._oViewModel.getProperty("/mode") === "edit") {
-				// attach to the request completed event of the batch
-				oModel.attachEventOnce("batchRequestCompleted", function(oEvent) {
-					if (that._checkIfBatchRequestSucceeded(oEvent)) {
-						that._fnUpdateSuccess();
-					} else {
-						that._fnEntityCreationFailed();
-						MessageBox.error(that._oResourceBundle.getText("updateError"));
-					}
-				});
-			}
-
-			oModel.submitChanges();
-		},
 		/**
 		 * Event handler for the list selection event
 		 * @param {sap.ui.base.Event} oEvent the list selectionChange event
@@ -190,6 +127,44 @@ sap.ui.define([
 		onBypassed: function() {
 			this._oTable.removeSelections(true);
 		},
+		
+		handleConfirmationMessageBoxPress: function(oEvent) {
+			var that = this;
+			var bCompact = !!this.getView().$().closest(".sapUiSizeCompact").length;
+			MessageBox.confirm(
+				"Voulez vous vraiment sauvegarder? Vous ne pouvez pas revenir en arrière", {
+					styleClass: bCompact ? "sapUiSizeCompact" : "",
+					actions: [sap.m.MessageBox.Action.OK, sap.m.MessageBox.Action.CANCEL],
+					onClose: function(sAction) {
+						if(sAction==="OK"){
+							that.onSave(oEvent);
+						}
+					}
+				}
+				
+			);
+		},
+
+		
+		onSave: function(oEvent){
+			var that=this,
+				oModel=this.getModel();
+				
+			this.getModel("projectsView").setProperty("/busy", true);
+			if (this._oViewModel.getProperty("/mode") === "edit") {
+				// attach to the request completed event of the batch
+				oModel.attachEventOnce("batchRequestCompleted", function(oEvent) {
+					if (that._checkIfBatchRequestSucceeded(oEvent)) {
+						that._fnUpdateSuccess();
+					} else {
+						that._fnEntityCreationFailed();
+						MessageBox.error(that._oResourceBundle.getText("updateError"));
+					}
+				});
+			}
+
+			oModel.submitChanges();
+		},
 
 		/**
 		 * Navigates back in the browser history, if the entry was created by this app.
@@ -214,6 +189,9 @@ sap.ui.define([
 				});
 			}
 		},
+	
+		
+		
 		setInitialSortOrder: function() {
         var oSmartTable = this.getView().byId("ProjectsSmartTable");            
         oSmartTable.applyVariant({
@@ -222,15 +200,10 @@ sap.ui.define([
                       sortItems: [{ 
                                      columnKey: "FRICE", 
                                      operation:"Ascending"
-                      },
-                    	{
-                    		columnKey:"COMPLEXITY",
-                    		operation:"Ascending"
-                    		
-                    	}
+                      }
                                  ]
-                   },
-            grouper:"FRICE"
+                   }
+	      
         	});
         
 		},
@@ -261,13 +234,19 @@ sap.ui.define([
 				//delay: 0,
 				title: this.getResourceBundle().getText("masterTitleCount", [0]),
 				//noDataText: this.getResourceBundle().getText("masterListNoDataText"),
-				tableNoDataText: this.getResourceBundle().getText("masterListNoDataText"),
+				//tableNoDataText: this.getResourceBundle().getText("masterListNoDataText"),
 				//sortBy: "ComplexityID",
 				//groupBy: "NONE",
 				tableBusyDelay: 0,
-				shareOnJamTitle: this.getResourceBundle().getText("projectsTitle"),
-				shareSendEmailSubject: this.getResourceBundle().getText("shareSendEmailProjectsSubject"),
-				shareSendEmailMessage: this.getResourceBundle().getText("shareSendEmailProjectsMessage", [location.href])
+				// enableCreate: false,
+				// delay: 0,
+				// busy: false,
+				// mode: "edit",
+				viewTitle: ""
+				
+				// shareOnJamTitle: this.getResourceBundle().getText("projectsTitle"),
+				// shareSendEmailSubject: this.getResourceBundle().getText("shareSendEmailProjectsSubject"),
+				// shareSendEmailMessage: this.getResourceBundle().getText("shareSendEmailProjectsMessage", [location.href])
 			});
 		},
 
@@ -294,7 +273,28 @@ sap.ui.define([
 				}
 			});
 		},
+		
 
+		
+		_checkIfBatchRequestSucceeded: function(oEvent) {
+			var oParams = oEvent.getParameters();
+			var aRequests = oEvent.getParameters().requests;
+			var oRequest;
+			if (oParams.success) {
+				if (aRequests) {
+					for (var i = 0; i < aRequests.length; i++) {
+						oRequest = oEvent.getParameters().requests[i];
+						if (!oRequest.success) {
+							return false;
+						}
+					}
+				}
+				return true;
+			} else {
+				return false;
+			}
+		},
+		
 		/**
 		 * Shows the selected item on the detail page
 		 * On phones a additional history entry is created
@@ -338,6 +338,74 @@ sap.ui.define([
 				this._oTableSelector.selectAListItem(sPath);
 				this._showDetail(oItem);
 			}
+		},
+		
+			/**
+		 * Handles the success of updating an object
+		 * @private
+		 */
+		_fnUpdateSuccess: function() {
+			this.getModel("appView").setProperty("/busy", false);
+			this.getView().unbindObject();
+			this.getRouter().getTargets().display("projectDetails");
+		},
+
+		/**
+		 * Handles the success of creating an object
+		 *@param {object} oData the response of the save action
+		 * @private
+		 */
+		_fnEntityCreated: function(oData) {
+			var sObjectPath = this.getModel().createKey("Projects", oData);
+			this.getModel("appView").setProperty("/itemToSelect", "/" + sObjectPath); //save last created
+			this.getModel("appView").setProperty("/busy", false);
+			this.getRouter().navTo("projectDetails", {
+				ID: encodeURIComponent(oData.ID)
+			});
+		},
+
+		/**
+		 * Handles the failure of creating/updating an object
+		 * @private
+		 */
+		_fnEntityCreationFailed: function() {
+			this.getModel("appView").setProperty("/busy", false);
+		},
+
+		/**
+		 * Handles the onDisplay event which is triggered when this view is displayed 
+		 * @param {sap.ui.base.Event} oEvent the on display event
+		 * @private
+		 */
+		_onDisplay: function(oEvent) {
+			var oData = oEvent.getParameter("data");
+			if (oData && oData.mode === "update") {
+				this._onEdit(oEvent);
+			} else {
+				this._onCreate(oEvent);
+			}
+		},
+
+		/**
+		 * Gets the form fields
+		 * @param {sap.ui.layout.form} oSimpleForm the form in the view.
+		 * @private
+		 */
+		_getFormFields: function(oSimpleForm) {
+			var aControls = [];
+			var aFormContent = oSimpleForm.getContent();
+			var sControlType;
+			for (var i = 0; i < aFormContent.length; i++) {
+				sControlType = aFormContent[i].getMetadata().getName();
+				if (sControlType === "sap.m.Input" || sControlType === "sap.m.DateTimeInput" ||
+					sControlType === "sap.m.CheckBox") {
+					aControls.push({
+						control: aFormContent[i],
+						required: aFormContent[i - 1].getRequired && aFormContent[i - 1].getRequired()
+					});
+				}
+			}
+			return aControls;
 		}
 
 	});
