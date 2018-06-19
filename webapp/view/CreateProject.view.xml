@@ -23,6 +23,9 @@
 			<!--		<core:Item text="{Name}" />-->
 			<!--	</suggestionItems>-->
 			<!--</Input>-->
+			
+			
+				
 						
 				<Label text="{i18n>ECOMPLEXITYTitle}" required="true"/>
 					<Select
@@ -34,7 +37,7 @@
 					<core:Item text="4-High"/>
 					<core:Item text="5-Very High"/>
 					</Select>
-				
+					
 					<Label text="{i18n>FSTitle}" required="true"/>
 					<Input name="FS" id="FS_id" valueLiveUpdate="true" liveChange="_validateSaveEnablement" enabled="true" visible="true"
 						value="{ path: 'FS', type: 'sap.ui.model.odata.type.Decimal'}"/>

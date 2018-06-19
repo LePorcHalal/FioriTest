@@ -43,53 +43,60 @@
 					</smartTable:layoutData>
 					<Table >
 						<columns>
+							<Column id="checkBox" width="20px">
+								
+							</Column>
+							
 							<Column id="FRICE" width="110px" hAlign="Begin">
 								<customData>
-									<core:CustomData key="p13nData" value='\{"columnKey": "FRICE", "maxLength": "200","columnIndex":"0", "leadingProperty": "FRICE"}' />
+									<core:CustomData key="p13nData" value='\{"columnKey": "FRICE", "maxLength": "200","columnIndex":"1", "leadingProperty": "FRICE"}' />
 								</customData>
 								<Text text="FRICE"/>
 							</Column>
 							<Column id="ComplexityID" width="110px" hAlign="Begin">
 								<customData>
 									<core:CustomData key="p13nData"
-										value='\{"columnKey": "ComplexityID", "maxLength": "200","columnIndex":"1", "leadingProperty": "COMPLEXITY"}'/>
+										value='\{"columnKey": "ComplexityID", "maxLength": "200","columnIndex":"2", "leadingProperty": "COMPLEXITY"}'/>
 								</customData>
 								<Text text="COMPLEXITY"/>
 							</Column>
 							<Column id="GrandTotalID" width="55px" hAlign="Begin">
 								<customData>
 									<core:CustomData key="p13nData"
-										value='\{"columnKey": "GrandTotalID", "maxLength": "200","columnIndex":"15", "leadingProperty": "GRAND_TOTAL"}'/>
+										value='\{"columnKey": "GrandTotalID", "maxLength": "200","columnIndex":"16", "leadingProperty": "GRAND_TOTAL"}'/>
 								</customData>
 								<Text text="GRAND TOTAL" maxLines="2"/>
 							</Column>
 							<Column id="TechLeadlID" width="40px" hAlign="Begin">
 								<customData>
-									<core:CustomData key="p13nData" value='\{"columnKey": "TechLeadID", "maxLength": "200","columnIndex":"14", "leadingProperty": "TECH_LEAD"}'/>
+									<core:CustomData key="p13nData" value='\{"columnKey": "TechLeadID", "maxLength": "200","columnIndex":"15", "leadingProperty": "TECH_LEAD"}'/>
 								</customData>
 								<Text text="TECH LEAD" maxLines="2"/>
 							</Column>
 							<Column id="TechArchID" width="40px" hAlign="Begin">
 								<customData>
-									<core:CustomData key="p13nData" value='\{"columnKey": "TechArchID", "maxLength": "200","columnIndex":"13", "leadingProperty": "TECH_ARCH"}'/>
+									<core:CustomData key="p13nData" value='\{"columnKey": "TechArchID", "maxLength": "200","columnIndex":"14", "leadingProperty": "TECH_ARCH"}'/>
 								</customData>
 								<Text text="TECH ARCH" maxLines="2"/>
 							</Column>
 							<Column id="TechID" width="40px" hAlign="Begin">
 								<customData>
-									<core:CustomData key="p13nData" value='\{"columnKey": "TechID", "maxLength": "200","columnIndex":"12", "leadingProperty": "TECH"}'/>
+									<core:CustomData key="p13nData" value='\{"columnKey": "TechID", "maxLength": "200","columnIndex":"13", "leadingProperty": "TECH"}'/>
 								</customData>
 								<Text text="TECH"/>
 							</Column>
 							<Column id="FuncID" width="40px" hAlign="Begin">
 								<customData>
-									<core:CustomData key="p13nData" value='\{"columnKey": "FuncID", "maxLength": "200","columnIndex":"11", "leadingProperty": "FUNC"}'/>
+									<core:CustomData key="p13nData" value='\{"columnKey": "FuncID", "maxLength": "200","columnIndex":"12", "leadingProperty": "FUNC"}'/>
 								</customData>
 								<Text text="FUNC"/>
 							</Column>
 						</columns>
 						<items >
 							<ColumnListItem>
+								<cells>
+										<CheckBox selected="false" />
+								</cells>
 								<cells>
 									<Text text="{FRICE}"/>
 								</cells>
