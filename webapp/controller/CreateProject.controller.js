@@ -191,7 +191,7 @@ sap.ui.define([
 
 			this._oViewModel.setProperty("/viewTitle", this._oResourceBundle.getText("createProjectTitle"));
 			this._oViewModel.setProperty("/mode", "create");
-			var oContext = this._oODataModel.createEntry("Projects", {
+			var oContext = this._oODataModel.createEntry("EffortMatrix", {
 				success: this._fnEntityCreated.bind(this),
 				error: this._fnEntityCreationFailed.bind(this),
 				properties: {
