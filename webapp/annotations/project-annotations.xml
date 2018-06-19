@@ -1,0 +1,269 @@
+<edmx:Edmx xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx" Version="4.0">
+    <edmx:Reference Uri="http://docs.oasis-open.org/odata/odata-data-aggregation-ext/v4.0/cs02/vocabularies/Org.OData.Aggregation.V1.xml">
+        <edmx:Include Alias="Aggregation" Namespace="Org.OData.Aggregation.V1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="http://docs.oasis-open.org/odata/odata/v4.0/errata03/os/complete/vocabularies/Org.OData.Capabilities.V1.xml">
+        <edmx:Include Alias="Capabilities" Namespace="Org.OData.Capabilities.V1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://wiki.scn.sap.com/wiki/download/attachments/448470974/Common.xml?api=v2">
+        <edmx:Include Alias="Common" Namespace="com.sap.vocabularies.Common.v1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://wiki.scn.sap.com/wiki/download/attachments/448470971/Communication.xml?api=v2">
+        <edmx:Include Alias="vCard" Namespace="com.sap.vocabularies.Communication.v1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="http://docs.oasis-open.org/odata/odata/v4.0/errata03/os/complete/vocabularies/Org.OData.Core.V1.xml">
+        <edmx:Include Alias="Core" Namespace="Org.OData.Core.V1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="http://docs.oasis-open.org/odata/odata/v4.0/errata03/os/complete/vocabularies/Org.OData.Measures.V1.xml">
+        <edmx:Include Alias="CQP" Namespace="Org.OData.Measures.V1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://wiki.scn.sap.com/wiki/download/attachments/448470968/UI.xml?api=v2">
+        <edmx:Include Alias="UI" Namespace="com.sap.vocabularies.UI.v1"/>
+    </edmx:Reference>
+    <edmx:DataServices>
+        <Schema xmlns="http://docs.oasis-open.org/odata/ns/edm" Namespace="zanno4sample_anno_mdl.v1">
+            <!-- Annotations for entity set Estimates -->
+            <!--<Annotations Target="com.beyondtechnologies.wricef.services.EstimatesType">-->
+            <!--    <Annotation Term="com.sap.vocabularies.UI.v1.LineItem" Qualifier="Q1">-->
+            <!--        <Collection>-->
+            <!--            <Record>-->
+            <!--                <PropertyValue Property="Label" String="Code"/>-->
+            <!--                <PropertyValue Property="Value" Path="FRICE"/>-->
+            <!--            </Record>-->
+            <!--            <Record Type="com.sap.vocabularies.UI.v1.DataField">-->
+            <!--                <PropertyValue Property="Label" String="Type"/>-->
+            <!--                <PropertyValue Property="Value" Path="TITLE"/>-->
+            <!--            </Record>-->
+            <!--            <Record Type="com.sap.vocabularies.UI.v1.DataField">-->
+            <!--                <PropertyValue Property="Label" String="Description"/>-->
+            <!--                <PropertyValue Property="Value" Path="DESCRIPTION"/>-->
+            <!--            </Record>-->
+            <!--            <Record Type="com.sap.vocabularies.UI.v1.DataField">-->
+            <!--                <PropertyValue Property="Label" String="Complexity"/>-->
+            <!--                <PropertyValue Property="Value" Path="Complexity"/>-->
+            <!--            </Record>-->
+            <!--            <Record Type="com.sap.vocabularies.UI.v1.DataField">-->
+            <!--                <PropertyValue Property="Label" String="FS"/>-->
+            <!--                <PropertyValue Property="Value" Path="FS"/>-->
+            <!--            </Record>-->
+            <!--            <Record Type="com.sap.vocabularies.UI.v1.DataField">-->
+            <!--                <PropertyValue Property="Label" String="FS SUP"/>-->
+            <!--                <PropertyValue Property="Value" Path="FS_SUP"/>-->
+            <!--            </Record>-->
+            <!--            <Record Type="com.sap.vocabularies.UI.v1.DataField">-->
+            <!--                <PropertyValue Property="Label" String="FS REV"/>-->
+            <!--                <PropertyValue Property="Value" Path="FS_REV"/>-->
+            <!--            </Record>-->
+            <!--            <Record Type="com.sap.vocabularies.UI.v1.DataField">-->
+            <!--                <PropertyValue Property="Label" String="TS"/>-->
+            <!--                <PropertyValue Property="Value" Path="TS"/>-->
+            <!--            </Record>-->
+            <!--            <Record Type="com.sap.vocabularies.UI.v1.DataField">-->
+            <!--                <PropertyValue Property="Label" String="DEV &amp; UT"/>-->
+            <!--                <PropertyValue Property="Value" Path="DEV_UT"/>-->
+            <!--            </Record>-->
+            <!--            <Record Type="com.sap.vocabularies.UI.v1.DataField">-->
+            <!--                <PropertyValue Property="Label" String="DEV SUP"/>-->
+            <!--                <PropertyValue Property="Value" Path="DEV_SUP"/>-->
+            <!--            </Record>-->
+            <!--            <Record Type="com.sap.vocabularies.UI.v1.DataField">-->
+            <!--                <PropertyValue Property="Label" String="FUT"/>-->
+            <!--                <PropertyValue Property="Value" Path="FUT"/>-->
+            <!--            </Record>-->
+            <!--            <Record Type="com.sap.vocabularies.UI.v1.DataField">-->
+            <!--                <PropertyValue Property="Label" String="FUT SUP"/>-->
+            <!--                <PropertyValue Property="Value" Path="FUT_SUP"/>-->
+            <!--            </Record>-->
+            <!--            <Record Type="com.sap.vocabularies.UI.v1.DataField">-->
+            <!--                <PropertyValue Property="Label" String="FIT SUP"/>-->
+            <!--                <PropertyValue Property="Value" Path="FIT_SUP"/>-->
+            <!--            </Record>-->
+            <!--            <Record Type="com.sap.vocabularies.UI.v1.DataField">-->
+            <!--                <PropertyValue Property="Label" String="FUNC"/>-->
+            <!--                <PropertyValue Property="Value" Path="FS"/>-->
+            <!--            </Record>-->
+            <!--            <Record Type="com.sap.vocabularies.UI.v1.DataField">-->
+            <!--                <PropertyValue Property="Label" String="TECH"/>-->
+            <!--                <PropertyValue Property="Value" Path="TECH"/>-->
+            <!--            </Record>-->
+            <!--            <Record Type="com.sap.vocabularies.UI.v1.DataField">-->
+            <!--                <PropertyValue Property="Label" String="Tech Arch."/>-->
+            <!--                <PropertyValue Property="Value" Path="TECH_ARCH"/>-->
+            <!--            </Record>-->
+            <!--            <Record Type="com.sap.vocabularies.UI.v1.DataField">-->
+            <!--                <PropertyValue Property="Label" String="Tech Lead"/>-->
+            <!--                <PropertyValue Property="Value" Path="TECH_LEAD"/>-->
+            <!--            </Record>-->
+            <!--            <Record Type="com.sap.vocabularies.UI.v1.DataField">-->
+            <!--                <PropertyValue Property="Label" String="Grand Total"/>-->
+            <!--                <PropertyValue Property="Value" Path="GRAND_TOTAL"/>-->
+            <!--            </Record>-->
+            <!--        </Collection>-->
+            <!--    </Annotation>-->
+            <!--    <Annotation Term="com.sap.vocabularies.UI.v1.HeaderInfo">-->
+            <!--        <Record Type="com.sap.vocabularies.UI.v1.HeaderInfoType">-->
+            <!--            <PropertyValue Property="TypeName" String="Estimate Details"/>-->
+            <!--            <PropertyValue Property="TypeNamePlural" String="Estimates"/>-->
+            <!--            <PropertyValue Property="Title">-->
+            <!--                <Record Type="com.sap.vocabularies.UI.v1.DataField">-->
+            <!--                    <PropertyValue Property="Value" Path="TITLE"/>-->
+            <!--                </Record>-->
+            <!--            </PropertyValue>-->
+            <!--            <PropertyValue Property="Description">-->
+            <!--                <Record Type="com.sap.vocabularies.UI.v1.DataField">-->
+            <!--                    <PropertyValue Property="Value" Path="FRICE"/>-->
+            <!--                </Record>-->
+            <!--            </PropertyValue>-->
+            <!--        </Record>-->
+            <!--    </Annotation>-->
+            <!--    <Annotation Term="com.sap.vocabularies.UI.v1.Facets">-->
+            <!--        <Collection>-->
+            <!--            <Record Type="com.sap.vocabularies.UI.v1.CollectionFacet">-->
+            <!--                <PropertyValue Property="Label" String="Information"/>-->
+            <!--                <PropertyValue Property="Facets">-->
+            <!--                    <Collection>-->
+            <!--                        <Record Type="com.sap.vocabularies.UI.v1.ReferenceFacet">-->
+            <!--                            <PropertyValue Property="Target" AnnotationPath="@com.sap.vocabularies.UI.v1.FieldGroup#MainFields"/>-->
+            <!--                        </Record>-->
+            <!--                    </Collection>-->
+            <!--                </PropertyValue>-->
+            <!--            </Record>-->
+            <!--            <Record Type="com.sap.vocabularies.UI.v1.CollectionFacet">-->
+            <!--                <PropertyValue Property="Label" String="COMPLEXITY"/>-->
+            <!--                <PropertyValue Property="Facets">-->
+            <!--                    <Collection>-->
+            <!--                        <Record Type="com.sap.vocabularies.UI.v1.ReferenceFacet">-->
+            <!--                            <PropertyValue Property="Target" AnnotationPath="@com.sap.vocabularies.UI.v1.FieldGroup#Complexity"/>-->
+            <!--                        </Record>-->
+            <!--                    </Collection>-->
+            <!--                </PropertyValue>-->
+            <!--            </Record>-->
+            <!--        </Collection>-->
+            <!--    </Annotation>-->
+            <!--    <Annotation Term="com.sap.vocabularies.UI.v1.FieldGroup" Qualifier="MainFields">-->
+            <!--        <Record Type="com.sap.vocabularies.UI.v1.FieldGroupType">-->
+            <!--            <PropertyValue Property="Data">-->
+            <!--                <Collection>-->
+            <!--                    <Record Type="com.sap.vocabularies.UI.v1.DataField">-->
+            <!--                        <PropertyValue Property="Value" Path="TITLE"/>-->
+            <!--                        <PropertyValue Property="Label" String="{i18n&gt;ETITLETitle}"/>-->
+            <!--                    </Record>-->
+            <!--                    <Record Type="com.sap.vocabularies.UI.v1.DataField">-->
+            <!--                        <PropertyValue Property="Value" Path="DESCRIPTION"/>-->
+            <!--                        <PropertyValue Property="Label" String="{i18n&gt;EDESCRIPTIONTitle}"/>-->
+            <!--                    </Record>-->
+            <!--                </Collection>-->
+            <!--            </PropertyValue>-->
+            <!--        </Record>-->
+            <!--    </Annotation>-->
+            <!--    <Annotation Term="com.sap.vocabularies.UI.v1.FieldGroup" Qualifier="Complexity">-->
+            <!--        <Record Type="com.sap.vocabularies.UI.v1.FieldGroupType">-->
+            <!--            <PropertyValue Property="Data">-->
+            <!--                <Collection>-->
+            <!--                    <Record Type="com.sap.vocabularies.UI.v1.DataField">-->
+            <!--                        <PropertyValue Property="Value" Path="COMPLEXITY"/>-->
+            <!--                        <PropertyValue Property="Label" String="{i18n&gt;ECOMPLEXITYTitle}"/>-->
+            <!--                    </Record>-->
+            <!--                </Collection>-->
+            <!--            </PropertyValue>-->
+            <!--        </Record>-->
+            <!--    </Annotation>-->
+            <!--</Annotations>-->
+            
+            
+            <!--<Annotations Target="com.beyondtechnologies.wricef.services.Estimates/FRICE">-->
+            <!--    <Annotation Term="com.sap.vocabularies.Common.v1.Text" Path="ID"/>-->
+            <!--</Annotations>-->
+            <!--<Annotations Target="com.beyondtechnologies.wricef.services.Estimates/COMPLEXITY">-->
+            <!--    <Annotation Term="com.sap.vocabularies.Common.v1.ValueList">-->
+            <!--        <Record Type="com.sap.vocabularies.Common.v1.ValueListType">-->
+            <!--            <PropertyValue Property="CollectionPath" String="EstimateSet"/>-->
+            <!--            <PropertyValue Property="Parameters">-->
+            <!--                <Collection>-->
+            <!--                    <Record Type="com.sap.vocabularies.Common.v1.ValueListParameterInOut">-->
+            <!--                        <PropertyValue Property="ValueListProperty" String="COMPLEXITY"/>-->
+            <!--                        <PropertyValue Property="LocalDataProperty" PropertyPath="COMPLEXITY"/>-->
+            <!--                    </Record>-->
+            <!--                    <Record Type="com.sap.vocabularies.Common.v1.ValueListParameterDisplayOnly">-->
+            <!--                        <PropertyValue Property="ValueListProperty" String="COMPLEXITY"/>-->
+            <!--                    </Record>-->
+            <!--                </Collection>-->
+            <!--            </PropertyValue>-->
+            <!--        </Record>-->
+            <!--    </Annotation>-->
+            <!--</Annotations>-->
+            
+            
+            <Annotations Target="com.beyondtechnologies.wricef.services.EffortMatrixType">
+            	<Annotation Term="com.sap.vocabularies.UI.v1.LineItem">
+					<Collection>
+						
+					
+						<Record Type="com.sap.vocabularies.UI.v1.DataField">
+							<PropertyValue Property="Value" Path="FS"/>
+							<PropertyValue Property="Label" String="FS"/>
+						</Record>
+							<Record Type="com.sap.vocabularies.UI.v1.DataField">
+							<PropertyValue Property="Label" String="FS_SUP"/>
+							<PropertyValue Property="Value" Path="FS_SUP"/>
+						</Record>
+							<Record Type="com.sap.vocabularies.UI.v1.DataField">
+							<PropertyValue Property="Label" String="FS_REV"/>
+							<PropertyValue Property="Value" Path="FS_REV"/>
+						</Record>
+							<Record Type="com.sap.vocabularies.UI.v1.DataField">
+							<PropertyValue Property="Label" String="TS"/>
+							<PropertyValue Property="Value" Path="TS"/>
+						</Record>
+						<Record Type="com.sap.vocabularies.UI.v1.DataField">
+							<PropertyValue Property="Label" String="DEV_UT"/>
+							<PropertyValue Property="Value" Path="DEV_UT"/>
+						</Record>
+						
+						<Record Type="com.sap.vocabularies.UI.v1.DataField">
+							<PropertyValue Property="Label" String="DEV_SUP"/>
+							<PropertyValue Property="Value" Path="DEV_SUP"/>
+						</Record>
+						<Record Type="com.sap.vocabularies.UI.v1.DataField">
+							<PropertyValue Property="Label" String="FUT"/>
+							<PropertyValue Property="Value" Path="FUT"/>
+						</Record>
+							<Record Type="com.sap.vocabularies.UI.v1.DataField">
+							<PropertyValue Property="Label" String="FUT_SUP"/>
+							<PropertyValue Property="Value" Path="FUT_SUP"/>
+						</Record>
+						<Record Type="com.sap.vocabularies.UI.v1.DataField">
+							<PropertyValue Property="Label" String="FIT_SUP"/>
+							<PropertyValue Property="Value" Path="FIT_SUP"/>
+						</Record>
+						
+						
+					</Collection>
+				</Annotation>
+
+
+				<Annotation Term="com.sap.vocabularies.UI.v1.SelectionFields">
+					<Collection>
+						<PropertyPath>COMPLEXITY</PropertyPath>
+						<PropertyPath>DEV_SUP</PropertyPath>
+						<PropertyPath>DEV_UT</PropertyPath>
+						<PropertyPath>FIT_SUP</PropertyPath>
+						<PropertyPath>FRICE</PropertyPath>
+						<PropertyPath>FS</PropertyPath>
+						<PropertyPath>FS_REV</PropertyPath>
+						<PropertyPath>FS_SUP</PropertyPath>
+						<PropertyPath>FUNC</PropertyPath>
+						<PropertyPath>FUT</PropertyPath>
+						<PropertyPath>FUT_SUP</PropertyPath>
+						<PropertyPath>GRAND_TOTAL</PropertyPath>
+						<PropertyPath>ID</PropertyPath>
+						<PropertyPath>TECH</PropertyPath>
+						<PropertyPath>TECH_ARCH</PropertyPath>
+						<PropertyPath>TECH_LEAD</PropertyPath>
+						<PropertyPath>TS</PropertyPath>
+					</Collection>
+				</Annotation>
+            </Annotations>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>

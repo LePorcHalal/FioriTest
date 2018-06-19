@@ -1,0 +1,143 @@
+{
+	"_version": "1.7.0",
+	"sap.app": {
+		"id": "com.beyondtechnologieswricef2",
+		"type": "application",
+		"i18n": "i18n/i18n.properties",
+		"title": "{{appTitle}}",
+		"description": "{{appDescription}}",
+		"applicationVersion": {
+			"version": "1.0.0"
+		},
+		"dataSources": {
+			"WRICEFODATA": {
+				"uri": "/destinations/WRICEFODATA/com/beyondtechnologies/wricef/services.xsodata/",
+				"type": "OData",
+				"settings": {
+					"odataVersion": "2.0",
+					"annotations": [
+						"effortMatrixAnnotations"
+					],
+					"localUri": "localService/metadata.xml"
+				}
+			},
+			"effortMatrixAnnotations": {
+				"uri": "annotations/project-annotations.xml",
+				"type": "ODataAnnotation",
+				"settings": {
+					"localUri": "annotations/project-annotations.xml"
+				}
+			}
+		},
+		"sourceTemplate": {
+			"id": "sap.ui.ui5-template-plugin.1worklist",
+			"version": "1.42.0"
+		}
+	},
+	"sap.ui": {
+		"technology": "UI5",
+		"icons": {
+			"icon": "sap-icon://detail-view",
+			"favIcon": "",
+			"phone": "",
+			"phone@2": "",
+			"tablet": "",
+			"tablet@2": ""
+		},
+		"deviceTypes": {
+			"desktop": true,
+			"tablet": true,
+			"phone": true
+		},
+		"supportedThemes": [
+			"sap_hcb",
+			"sap_belize"
+		]
+	},
+	"sap.ui5": {
+		"rootView": {
+			"viewName": "com.beyondtechnologies.view.App",
+			"type": "XML",
+			"id": "app"
+		},
+		"dependencies": {
+			"minUI5Version": "1.42.0",
+			"libs": {
+				"sap.ui.core": {},
+				"sap.m": {},
+				"sap.ui.layout": {},
+				"sap.f": {},
+				"sap.ushell": {},
+				"sap.collaboration": {},
+				"sap.ui.comp": {},
+				"sap.uxap": {}
+			}
+		},
+		"contentDensities": {
+			"compact": true,
+			"cozy": true
+		},
+		"models": {
+			"i18n": {
+				"type": "sap.ui.model.resource.ResourceModel",
+				"settings": {
+					"bundleName": "com.beyondtechnologies.i18n.i18n"
+				}
+			},
+			"": {
+				"dataSource": "WRICEFODATA",
+				"settings": {
+					"metadataUrlParams": {
+						"sap-documentation": "heading"
+					},
+					"defaultBindingMode": "TwoWay"
+				}
+			},
+			"@i18n": {
+				"type": "sap.ui.model.resource.ResourceModel",
+				"uri": "i18n/i18n.properties"
+			}
+		},
+		"routing": {
+			"config": {
+				"routerClass": "sap.m.routing.Router",
+				"viewType": "XML",
+				"viewPath": "com.beyondtechnologies.view",
+				"controlId": "app",
+				"controlAggregation": "pages",
+				"bypassed": {
+					"target": "notFound"
+				}
+
+			},
+			"routes": [
+				{
+					"pattern": "",
+					"name": "projects",
+					"target": "projects"
+				}
+			],
+			"targets": {
+				"projects": {
+					"viewName": "Projects",
+					"viewLevel": 1,
+					"viewId": "projects",
+					"title": "{i18n>projectsTitle}"
+				},
+				"createProject": {
+					"viewName": "CreateProject",
+					"viewLevel": 2
+				},
+				
+				"notFound": {
+					"viewName": "NotFound",
+					"viewId": "notFound"
+				}
+			}
+		}
+	},
+	"sap.platform.hcp": {
+		"uri": "webapp",
+		"_version": "1.1.0"
+	}
+}

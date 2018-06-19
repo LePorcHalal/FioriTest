@@ -1,0 +1,227 @@
+<?xml version="1.0"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:html="http://www.w3.org/TR/REC-html40">
+ <DocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
+  <Author>WRICEF Estimates App</Author>
+  <Company>Solutions Beyond Technologies</Company>
+  <Version>15.00</Version>
+ </DocumentProperties>
+ <OfficeDocumentSettings xmlns="urn:schemas-microsoft-com:office:office">
+  <AllowPNG/>
+ </OfficeDocumentSettings>
+ <ExcelWorkbook xmlns="urn:schemas-microsoft-com:office:excel">
+  <WindowHeight>9630</WindowHeight>
+  <WindowWidth>18900</WindowWidth>
+  <WindowTopX>0</WindowTopX>
+  <WindowTopY>0</WindowTopY>
+  <ProtectStructure>False</ProtectStructure>
+  <ProtectWindows>False</ProtectWindows>
+ </ExcelWorkbook>
+ <Styles>
+  <Style ss:ID="Default" ss:Name="Normal">
+   <Alignment ss:Vertical="Bottom"/>
+   <Borders/>
+   <Font ss:FontName="Calibri" x:Family="Swiss" ss:Size="11" ss:Color="#000000"/>
+   <Interior/>
+   <NumberFormat/>
+   <Protection/>
+  </Style>
+  <Style ss:ID="s62" ss:Name="Hyperlink">
+   <Font ss:FontName="Calibri" x:Family="Swiss" ss:Size="11" ss:Color="#0066CC"
+    ss:Underline="Single"/>
+  </Style>
+  <Style ss:ID="s63">
+   <Alignment ss:Vertical="Center"/>
+   <Font ss:FontName="Calibri" x:Family="Swiss" ss:Size="14" ss:Color="#000000"
+    ss:Bold="1"/>
+  </Style>
+  <Style ss:ID="s66" ss:Parent="s62">
+   <Alignment ss:Horizontal="Left" ss:Vertical="Bottom"/>
+   <Font ss:FontName="Calibri" x:Family="Swiss" ss:Size="14" ss:Color="#0066CC"
+    ss:Bold="1" ss:Underline="Single"/>
+  </Style>
+  <Style ss:ID="s68">
+   <Alignment ss:Vertical="Center"/>
+   <Font ss:FontName="Calibri" x:Family="Swiss" ss:Color="#000000"/>
+  </Style>
+  <Style ss:ID="s70" ss:Parent="s62">
+   <Alignment ss:Horizontal="Left" ss:Vertical="Center"/>
+   <Font ss:FontName="Calibri" x:Family="Swiss" ss:Color="#0066CC" ss:Bold="1"
+    ss:Underline="Single"/>
+  </Style>
+  <Style ss:ID="s72">
+   <Alignment ss:Horizontal="Left" ss:Vertical="Bottom" ss:WrapText="1"/>
+  </Style>
+  <Style ss:ID="s73">
+   <Alignment ss:Vertical="Bottom"/>
+  </Style>
+  <Style ss:ID="s74">
+   <Alignment ss:Vertical="Bottom" ss:WrapText="1"/>
+  </Style>
+  <Style ss:ID="s76">
+   <Alignment ss:Horizontal="Left" ss:Vertical="Top" ss:WrapText="1"/>
+  </Style>
+  <Style ss:ID="s77">
+   <Font ss:FontName="Calibri" x:Family="Swiss" ss:Size="11" ss:Color="#000000"
+    ss:Bold="1"/>
+  </Style>
+  <Style ss:ID="s79">
+   <Alignment ss:Horizontal="Left" ss:Vertical="Center" ss:WrapText="1"/>
+   <Font ss:FontName="Calibri" x:Family="Swiss" ss:Size="13" ss:Color="#000000"
+    ss:Bold="1"/>
+  </Style>
+  <Style ss:ID="s80">
+   <Alignment ss:Vertical="Center" ss:WrapText="1"/>
+   <Borders/>
+   <Interior ss:Color="#F2F2F2" ss:Pattern="Solid"/>
+  </Style>
+  <Style ss:ID="s81">
+   <Alignment ss:Horizontal="Right" ss:Vertical="Center" ss:WrapText="1"/>
+   <Borders/>
+   <Interior ss:Color="#F2F2F2" ss:Pattern="Solid"/>
+  </Style>
+  <Style ss:ID="s82">
+   <Alignment ss:Vertical="Center"/>
+  </Style>
+  <Style ss:ID="s83">
+   <Alignment ss:Vertical="Top" ss:WrapText="1"/>
+   <Borders>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#AEAAAA"/>
+   </Borders>
+  </Style>
+  <Style ss:ID="s84">
+   <Alignment ss:Vertical="Top"/>
+   <Borders>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#AEAAAA"/>
+   </Borders>
+  </Style>
+  <Style ss:ID="s86">
+   <Alignment ss:Horizontal="Right" ss:Vertical="Top"/>
+   <Borders>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#AEAAAA"/>
+   </Borders>
+   <NumberFormat ss:Format="@"/>
+  </Style>
+  <Style ss:ID="s87">
+   <Alignment ss:Vertical="Top"/>
+   <Font ss:FontName="Calibri" x:Family="Swiss" ss:Color="#000000"/>
+   <NumberFormat ss:Format="@"/>
+  </Style>
+ </Styles>
+ <Worksheet ss:Name="Sheet1">
+  <Table ss:ExpandedColumnCount="19" ss:ExpandedRowCount="14" x:FullColumns="1"
+   x:FullRows="1" ss:DefaultRowHeight="15">
+   <Column ss:AutoFitWidth="0" ss:Width="7.5"/>
+   <Column ss:AutoFitWidth="0" ss:Width="146.25"/>
+   <Column ss:AutoFitWidth="0" ss:Width="132.75"/>
+   <Column ss:AutoFitWidth="0" ss:Width="105.75"/>
+   <Column ss:AutoFitWidth="0" ss:Width="157.5"/>
+   <Column ss:AutoFitWidth="0" ss:Width="45" ss:Span="13"/>
+   <Row ss:AutoFitHeight="0" ss:Height="7.5"/>
+   <Row ss:AutoFitHeight="0" ss:Height="30">
+    <Cell ss:Index="2" ss:StyleID="s63"><Data ss:Type="String">WRICEF Estimate</Data></Cell>
+    <Cell ss:Index="4" ss:StyleID="s63"/>
+    <Cell ss:StyleID="s63"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="22.5">
+    <Cell ss:Index="2" ss:MergeAcross="1" ss:StyleID="s66" ss:HRef="C:\Users\Guilherme\Dropbox\Beyond Projects\WRICEF\{URL}"><Data
+      ss:Type="String">{PROJECT-NAME}</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5" ss:StyleID="s68">
+    <Cell ss:Index="2" ss:StyleID="s87"><Data ss:Type="String">{PROJECT-ID}</Data></Cell>
+    <Cell ss:StyleID="s70"/>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="7.5"/>
+   <Row ss:AutoFitHeight="0" ss:Height="16.5">
+    <Cell ss:Index="2" ss:MergeAcross="1" ss:StyleID="s72"><Data ss:Type="String">Project Name: {PROJECT-NAME}</Data></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">FUNC: {PROJECT-FUNC}</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="16.5">
+    <Cell ss:Index="2" ss:MergeAcross="1" ss:StyleID="s72"><Data ss:Type="String">Customer: {PROJECT-CUSTOMER}</Data></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">TECH: {PROJECT-TECH}</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="16.5">
+    <Cell ss:Index="2" ss:StyleID="s73"><Data ss:Type="String">Responsible (Project or Delivery Manager): {PROJECT-RESPONSIBLE}</Data></Cell>
+    <Cell ss:StyleID="s74"/>
+    <Cell ss:Index="5"><Data ss:Type="String">Tech Arch.: {PROJECT-TECH_ARCH}</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="16.5">
+    <Cell ss:Index="2" ss:MergeAcross="2" ss:MergeDown="1" ss:StyleID="s76"><Data
+      ss:Type="String">Project Description: {PROJECT-DESCRIPTION}</Data></Cell>
+    <Cell><Data ss:Type="String">Tech Lead: {PROJECT-TECH_LEAD}</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="16.5">
+    <Cell ss:Index="5" ss:StyleID="s77"><Data ss:Type="String">Total effort: {PROJECT-GRAND_TOTAL}</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="7.5"/>
+   <Row ss:AutoFitHeight="0" ss:Height="18.75">
+    <Cell ss:Index="2" ss:MergeAcross="1" ss:StyleID="s79"><Data ss:Type="String">Estimates ({CNT_ESTIMATES})</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="30">
+    <Cell ss:Index="2" ss:StyleID="s80"><Data ss:Type="String">Development Title</Data></Cell>
+    <Cell ss:StyleID="s80"><Data ss:Type="String">FRICE</Data></Cell>
+    <Cell ss:StyleID="s80"><Data ss:Type="String">Complexity</Data></Cell>
+    <Cell ss:StyleID="s80"><Data ss:Type="String">Development Description</Data></Cell>
+    <Cell ss:StyleID="s81"><Data ss:Type="String">FS</Data></Cell>
+    <Cell ss:StyleID="s81"><Data ss:Type="String">FS SUP</Data></Cell>
+    <Cell ss:StyleID="s81"><Data ss:Type="String">FS REV</Data></Cell>
+    <Cell ss:StyleID="s81"><Data ss:Type="String">TS</Data></Cell>
+    <Cell ss:StyleID="s81"><Data ss:Type="String">DEV &amp; UT</Data></Cell>
+    <Cell ss:StyleID="s81"><Data ss:Type="String">DEV SUP</Data></Cell>
+    <Cell ss:StyleID="s81"><Data ss:Type="String">FUT</Data></Cell>
+    <Cell ss:StyleID="s81"><Data ss:Type="String">FUT SUP</Data></Cell>
+    <Cell ss:StyleID="s81"><Data ss:Type="String">FIT SUP</Data></Cell>
+    <Cell ss:StyleID="s81"><Data ss:Type="String">FUNC</Data></Cell>
+    <Cell ss:StyleID="s81"><Data ss:Type="String">TECH</Data></Cell>
+    <Cell ss:StyleID="s81"><Data ss:Type="String">Tech Arch.</Data></Cell>
+    <Cell ss:StyleID="s81"><Data ss:Type="String">Tech Lead</Data></Cell>
+    <Cell ss:StyleID="s81"><Data ss:Type="String">Total effort</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="18.75" ss:StyleID="s82">
+    <Cell ss:Index="2" ss:StyleID="s83"><Data ss:Type="String">{ESTIMATE-TITLE}</Data></Cell>
+    <Cell ss:StyleID="s84"><Data ss:Type="String">{ESTIMATE-FRICE}</Data></Cell>
+    <Cell ss:StyleID="s84"><Data ss:Type="String">{ESTIMATE-COMPLEXITY}</Data></Cell>
+    <Cell ss:StyleID="s83"><Data ss:Type="String">{ESTIMATE-DESCRIPTION}</Data></Cell>
+    <Cell ss:StyleID="s86"><Data ss:Type="String">{ESTIMATE-FS}</Data></Cell>
+    <Cell ss:StyleID="s86"><Data ss:Type="String">{ESTIMATE-FS_SUP}</Data></Cell>
+    <Cell ss:StyleID="s86"><Data ss:Type="String">{ESTIMATE-FS_REV}</Data></Cell>
+    <Cell ss:StyleID="s86"><Data ss:Type="String">{ESTIMATE-TS}</Data></Cell>
+    <Cell ss:StyleID="s86"><Data ss:Type="String">{ESTIMATE-DEV_UT}</Data></Cell>
+    <Cell ss:StyleID="s86"><Data ss:Type="String">{ESTIMATE-DEV_SUP}</Data></Cell>
+    <Cell ss:StyleID="s86"><Data ss:Type="String">{ESTIMATE-FUT}</Data></Cell>
+    <Cell ss:StyleID="s86"><Data ss:Type="String">{ESTIMATE-FUT_SUP}</Data></Cell>
+    <Cell ss:StyleID="s86"><Data ss:Type="String">{ESTIMATE-FIT_SUP}</Data></Cell>
+    <Cell ss:StyleID="s86"><Data ss:Type="String">{ESTIMATE-FUNC}</Data></Cell>
+    <Cell ss:StyleID="s86"><Data ss:Type="String">{ESTIMATE-TECH}</Data></Cell>
+    <Cell ss:StyleID="s86"><Data ss:Type="String">{ESTIMATE-TECH_ARCH}</Data></Cell>
+    <Cell ss:StyleID="s86"><Data ss:Type="String">{ESTIMATE-TECH_LEAD}</Data></Cell>
+    <Cell ss:StyleID="s86"><Data ss:Type="String">{ESTIMATE-GRAND_TOTAL}</Data></Cell>
+   </Row>
+  </Table>
+  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+   <PageSetup>
+    <Header x:Margin="0.3"/>
+    <Footer x:Margin="0.3"/>
+    <PageMargins x:Bottom="0.75" x:Left="0.7" x:Right="0.7" x:Top="0.75"/>
+   </PageSetup>
+   <Unsynced/>
+   <Print>
+    <ValidPrinterInfo/>
+    <PaperSizeIndex>9</PaperSizeIndex>
+    <HorizontalResolution>-3</HorizontalResolution>
+    <VerticalResolution>0</VerticalResolution>
+   </Print>
+   <Selected/>
+   <DoNotDisplayGridlines/>
+   <ProtectObjects>False</ProtectObjects>
+   <ProtectScenarios>False</ProtectScenarios>
+  </WorksheetOptions>
+ </Worksheet>
+</Workbook>

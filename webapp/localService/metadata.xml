@@ -1,0 +1,88 @@
+<edmx:Edmx
+    xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx"
+    xmlns:sap="http://www.sap.com/Protocols/SAPData" Version="1.0">
+    <edmx:DataServices
+        xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" m:DataServiceVersion="2.0">
+        <Schema
+            xmlns:d="http://schemas.microsoft.com/ado/2007/08/dataservices"
+            xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata"
+            xmlns="http://schemas.microsoft.com/ado/2008/09/edm" Namespace="com.beyondtechnologies.wricef.services">
+            <EntityType Name="EffortMatrixType">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.String" Nullable="false" MaxLength="40"/>
+                <Property Name="FRICE" Type="Edm.String" Nullable="false" MaxLength="2"/>
+                <Property Name="COMPLEXITY" Type="Edm.String" Nullable="false" MaxLength="15"/>
+                <Property Name="FS" Type="Edm.Double" Nullable="false"/>
+                <Property Name="FS_SUP" Type="Edm.Double" Nullable="false"/>
+                <Property Name="FS_REV" Type="Edm.Double" Nullable="false"/>
+                <Property Name="TS" Type="Edm.Double" Nullable="false"/>
+                <Property Name="DEV_UT" Type="Edm.Double" Nullable="false"/>
+                <Property Name="DEV_SUP" Type="Edm.Double" Nullable="false"/>
+                <Property Name="FUT" Type="Edm.Double" Nullable="false"/>
+                <Property Name="FUT_SUP" Type="Edm.Double" Nullable="false"/>
+                <Property Name="FIT_SUP" Type="Edm.Double" Nullable="false"/>
+                <Property Name="FUNC" Type="Edm.Double" Nullable="false"/>
+                <Property Name="TECH" Type="Edm.Double" Nullable="false"/>
+                <Property Name="TECH_ARCH" Type="Edm.Double" Nullable="false"/>
+                <Property Name="TECH_LEAD" Type="Edm.Double" Nullable="false"/>
+                <Property Name="GRAND_TOTAL" Type="Edm.Double" Nullable="false"/>
+                </EntityType>
+            <EntityType Name="EstimatesType">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.Int32" Nullable="false"/>
+                <Property Name="PROJECT_ID" Type="Edm.Int32" Nullable="false"/>
+                <Property Name="FRICE" Type="Edm.String" Nullable="false" MaxLength="40"/>
+                <Property Name="TITLE" Type="Edm.String" Nullable="false" MaxLength="100"/>
+                <Property Name="DESCRIPTION" Type="Edm.String" MaxLength="255"/>
+                <Property Name="COMPLEXITY" Type="Edm.String" Nullable="false" MaxLength="15"/>
+                <Property Name="FS" Type="Edm.Double"/>
+                <Property Name="FS_SUP" Type="Edm.Double"/>
+                <Property Name="FS_REV" Type="Edm.Double"/>
+                <Property Name="TS" Type="Edm.Double"/>
+                <Property Name="DEV_UT" Type="Edm.Double"/>
+                <Property Name="DEV_SUP" Type="Edm.Int32"/>
+                <Property Name="FUT" Type="Edm.Double"/>
+                <Property Name="FUT_SUP" Type="Edm.Double"/>
+                <Property Name="FIT_SUP" Type="Edm.Double"/>
+                <Property Name="FUNC" Type="Edm.Double"/>
+                <Property Name="TECH" Type="Edm.Double"/>
+                <Property Name="TECH_ARCH" Type="Edm.Double"/>
+                <Property Name="TECH_LEAD" Type="Edm.Double"/>
+                <Property Name="GRAND_TOTAL" Type="Edm.Double"/>
+            </EntityType>
+            <EntityType Name="ProjectsType">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.Int32" Nullable="false"/>
+                <Property Name="NAME" Type="Edm.String" Nullable="false" MaxLength="100"/>
+                <Property Name="CUSTOMER" Type="Edm.String" Nullable="false" MaxLength="100"/>
+                <Property Name="RESPONSIBLE" Type="Edm.String" Nullable="false" MaxLength="100"/>
+                <Property Name="DESCRIPTION" Type="Edm.String" MaxLength="255"/>
+                <Property Name="FUNC" Type="Edm.Double"/>
+                <Property Name="TECH" Type="Edm.Double"/>
+                <Property Name="TECH_ARCH" Type="Edm.Double"/>
+                <Property Name="TECH_LEAD" Type="Edm.Double"/>
+                <Property Name="GRAND_TOTAL" Type="Edm.Double"/>
+                <NavigationProperty Name="Items" Relationship="com.beyondtechnologies.wricef.services.ProjectEstimatesType" FromRole="ProjectsPrincipal" ToRole="EstimatesDependent"/>
+            </EntityType>
+            <Association Name="ProjectEstimatesType">
+                <End Type="com.beyondtechnologies.wricef.services.ProjectsType" Role="ProjectsPrincipal" Multiplicity="1"/>
+                <End Type="com.beyondtechnologies.wricef.services.EstimatesType" Role="EstimatesDependent" Multiplicity="*"/>
+            </Association>
+            <EntityContainer Name="services" m:IsDefaultEntityContainer="true">
+                <EntitySet Name="EffortMatrix" EntityType="com.beyondtechnologies.wricef.services.EffortMatrixType" sap:creatable="false" sap:updatable="false" sap:deletable="false"/>
+                <EntitySet Name="Estimates" EntityType="com.beyondtechnologies.wricef.services.EstimatesType"/>
+                <EntitySet Name="Projects" EntityType="com.beyondtechnologies.wricef.services.ProjectsType"/>
+                <AssociationSet Name="ProjectEstimates" Association="com.beyondtechnologies.wricef.services.ProjectEstimatesType">
+                    <End Role="ProjectsPrincipal" EntitySet="Projects"/>
+                    <End Role="EstimatesDependent" EntitySet="Estimates"/>
+                </AssociationSet>
+            </EntityContainer>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>
