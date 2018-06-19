@@ -34,46 +34,46 @@
 					<core:Item text="4-High"/>
 					<core:Item text="5-Very High"/>
 					</Select>
+				
 					<Label text="{i18n>FSTitle}" required="true"/>
 					<Input name="FS" id="FS_id" valueLiveUpdate="true" liveChange="_validateSaveEnablement" enabled="true" visible="true"
-						value="{ path: 'FS', type: 'sap.ui.model.odata.type.Double' }"/>
+						value="{ path: 'FS', type: 'sap.ui.model.odata.type.Decimal'}"/>
 					
 					<Label text="{i18n>EFRICETitle}" required="true"/>
 					<Input name="FRICE" id="FRICE_id" valueLiveUpdate="true" liveChange="_validateSaveEnablement" enabled="true" visible="true"
 						value="{ path: 'FRICE', type: 'sap.ui.model.odata.type.String' }"/>
-					
-		
+				 	
 					<Label text="{i18n>FS_SUPTitle}" required="true"/>
 					<Input name="FS_SUP" id="FS_SUP_id" valueLiveUpdate="true" liveChange="_validateSaveEnablement" enabled="true" visible="true"
-						value="{ path: 'FS_SUP', type: 'sap.ui.model.odata.type.Double'}"/>
+						value="{ path: 'FS_SUP', type: 'sap.ui.model.odata.type.Decimal'}"/>
 					
 					<Label text="{i18n>FS_REVTitle}" required="true"/>
 					<Input name="FS_REV" id="FS_REV_id" valueLiveUpdate="true" liveChange="_validateSaveEnablement" enabled="true" visible="true"
-						value="{ path: 'FS_REV', type: 'sap.ui.model.odata.type.Double' }"/>
+						value="{ path: 'FS_REV', type: 'sap.ui.model.odata.type.Decimal' }"/>
 					
 					<Label text="{i18n>TSTitle}" required="true"/>
 					<Input name="TS" id="TS_id" valueLiveUpdate="true" liveChange="_validateSaveEnablement" enabled="true" visible="true"
-						value="{ path: 'TS', type: 'sap.ui.model.odata.type.Double' }"/>
+						value="{ path: 'TS', type: 'sap.ui.model.odata.type.Decimal' }"/>
 					
 					<Label text="{i18n>DEV_UTTitle}" required="true"/>
 					<Input name="DEV_UT" id="DEV_UT_id" valueLiveUpdate="true" liveChange="_validateSaveEnablement" enabled="true" visible="true"
-						value="{ path: 'DEV_UT',type: 'sap.ui.model.odata.type.Double' }"/>
+						value="{ path: 'DEV_UT',type: 'sap.ui.model.odata.type.Decimal' }"/>
 					
 						<Label text="{i18n>DEV_SUPTitle}" required="true"/>
 					<Input name="DEV_SUP" id="DEV_SUP_id" valueLiveUpdate="true" liveChange="_validateSaveEnablement" enabled="true" visible="true"
-					value="{ path: 'DEV_SUP', type: 'sap.ui.model.odata.type.Double' }"/>
+					value="{ path: 'DEV_SUP', type: 'sap.ui.model.odata.type.Decimal' }"/>
 					
 						<Label text="{i18n>FUTTitle}" required="true"/>
 					<Input name="FUT" id="FUT_id" valueLiveUpdate="true" liveChange="_validateSaveEnablement" enabled="true" visible="true"
-					value="{ path: 'FUT', type: 'sap.ui.model.odata.type.Double' }"/>
+					value="{ path: 'FUT', type: 'sap.ui.model.odata.type.Decimal' }"/>
 					
 						<Label text="{i18n>FUT_SUPTitle}" required="true"/>
 					<Input name="FUT_SUP" id="FUT_SUP_id" valueLiveUpdate="true" liveChange="_validateSaveEnablement" enabled="true" visible="true"
-					value="{ path: 'FUT_SUP', type: 'sap.ui.model.odata.type.Double' }"/>
+					value="{ path: 'FUT_SUP', type: 'sap.ui.model.odata.type.Decimal' }"/>
 					
 					<Label text="{i18n>FIT_SUPTitle}" required="true"/>
 					<Input name="FIT_SUP" id="FIT_SUP_id" valueLiveUpdate="true" liveChange="_validateSaveEnablement" enabled="true" visible="true"
-					value="{ path: 'FIT_SUP', type: 'sap.ui.model.odata.type.Double' }"/>
+					value="{ path: 'FIT_SUP', type: 'sap.ui.model.odata.type.Decimal' }"/>
 					
 					
 				</f:content>
