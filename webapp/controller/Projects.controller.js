@@ -163,6 +163,7 @@ sap.ui.define([
 						MessageBox.error(that._oResourceBundle.getText("updateError"));
 					}
 				});
+			
 			}
 
 			oModel.submitChanges();
@@ -379,9 +380,7 @@ sap.ui.define([
 			var sObjectPath = this.getModel().createKey("Projects", oData);
 			this.getModel("appView").setProperty("/itemToSelect", "/" + sObjectPath); //save last created
 			this.getModel("appView").setProperty("/busy", false);
-			this.getRouter().navTo("projectDetails", {
-				ID: encodeURIComponent(oData.ID)
-			});
+		this.getRouter().navTo("projects");
 		},
 
 		/**

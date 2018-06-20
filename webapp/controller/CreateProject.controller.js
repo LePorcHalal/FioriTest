@@ -75,6 +75,10 @@ sap.ui.define([
 						MessageBox.error(that._oResourceBundle.getText("updateError"));
 					}
 				});
+			}else{
+				
+				
+					this.getRouter().navTo("projects");
 			}
 
 			oModel.submitChanges();
@@ -248,7 +252,7 @@ sap.ui.define([
 		_fnUpdateSuccess: function() {
 			this.getModel("appView").setProperty("/busy", false);
 			this.getView().unbindObject();
-			this.getRouter().getTargets().display("projectDetails");
+			this.getRouter().getTargets().display("projects");
 		},
 
 		/**
@@ -260,7 +264,7 @@ sap.ui.define([
 			var sObjectPath = this.getModel().createKey("Projects", oData);
 			this.getModel("appView").setProperty("/itemToSelect", "/" + sObjectPath); //save last created
 			this.getModel("appView").setProperty("/busy", false);
-			this.getRouter().navTo("projectDetails", {
+			this.getRouter().navTo("projects", {
 				ID: encodeURIComponent(oData.ID)
 			});
 		},
