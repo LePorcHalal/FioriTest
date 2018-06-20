@@ -29,7 +29,7 @@
 				<smartTable:SmartTable id="ProjectsSmartTable" entitySet="EffortMatrix"  smartFilterId="smartFilterBar" tableType="ResponsiveTable"
 					useExportToExcel="false" useVariantManagement="false" useTablePersonalisation="true" header="{i18n>Projects}" showRowCount="false"
 					persistencyKey="SmartTableAnalytical_Explored" editable="false" editTogglable="true" enableAutoBinding="true" app:useSmartField="true"
-					class="sapUiResponsiveContentPadding">
+					class="sapUiResponsiveContentPadding" >
 					<smartTable:customToolbar>
 						<OverflowToolbar design="Transparent">
 							<ToolbarSpacer/>
@@ -41,11 +41,9 @@
 					<smartTable:layoutData>
 						<FlexItemData growFactor="1" baseSize="0%"/>
 					</smartTable:layoutData>
-					<Table >
+					<Table mode="MultiSelect">
 						<columns>
-							<Column id="checkBox" width="20px">
-								
-							</Column>
+							
 							
 							<Column id="FRICE" width="110px" hAlign="Begin">
 								<customData>
@@ -94,9 +92,7 @@
 						</columns>
 						<items >
 							<ColumnListItem>
-								<cells>
-										<CheckBox selected="false" />
-								</cells>
+								
 								<cells>
 									<Text text="{FRICE}"/>
 								</cells>

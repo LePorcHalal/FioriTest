@@ -321,11 +321,11 @@ sap.ui.define([
 		
 			onDelete: function() {
 			var that = this;
-			var oViewModel = this.getModel("detailView"),
-				sPath = oViewModel.getProperty("/sObjectPath"),
-				sObjectHeader = this._oODataModel.getProperty(sPath + "/NAME"),
-				sQuestion = this._oResourceBundle.getText("deleteText", sObjectHeader),
-				sSuccessMessage = this._oResourceBundle.getText("deleteSuccess", sObjectHeader);
+			var oViewModel = this.getModel("projectsView"),
+                sPath = oViewModel.getProperty("/sObjectPath"),
+                sObjectHeader = this._oODataModel.getProperty(sPath + "/NAME"),
+                sQuestion = this._oResourceBundle.getText("deleteText", sObjectHeader),
+                sSuccessMessage = this._oResourceBundle.getText("deleteSuccess", sObjectHeader);
 
 			var fnMyAfterDeleted = function() {
 				oViewModel.setProperty("/busy", false);
@@ -336,6 +336,29 @@ sap.ui.define([
 				question: sQuestion
 			}, [sPath], fnMyAfterDeleted);
 		},
+		
+		_confirmDeletionByUser: function(oConfirmation, aPaths, fnAfterDeleted, fnDeleteCanceled, fnDeleteConfirmed) {
+            /* eslint-enable */
+            // Callback function for when the user decides to perform the deletion
+            var fnDelete = function() {
+                // Calls the oData Delete service
+                this._callDelete(aPaths, fnAfterDeleted);
+            }.bind(this);
+
+            // Opens the confirmation dialog
+            MessageBox.show(oConfirmation.question, {
+                icon: oConfirmation.icon || MessageBox.Icon.WARNING,
+                title: oConfirmation.title || this._oResourceBundle.getText("delete"),
+                actions: [MessageBox.Action.OK, MessageBox.Action.CANCEL],
+                onClose: function(oAction) {
+                    if (oAction === MessageBox.Action.OK) {
+                        fnDelete();
+                    } else if (fnDeleteCanceled) {
+                        fnDeleteCanceled();
+                    }
+                }
+            });
+        },
 
 		/**
 		 * It navigates to the saved itemToSelect item. After delete it navigate to the next item. 
