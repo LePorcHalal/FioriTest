@@ -404,7 +404,7 @@ sap.ui.define([
 			this.getModel("projectsView").setProperty("/busy", false);
 			this.getRouter().navTo("projects", {
 				ID: encodeURIComponent(oData.ID)
-				oViewModel.setProperty("/busy", false);
+			//	oViewModel.setProperty("/busy", false);
 			});
 		},
 
