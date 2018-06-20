@@ -25,7 +25,10 @@
 			<!--</Input>-->
 			
 			
-				
+				<Label text="Id" required="true"/>
+					<Input name="ID" id="ID_id" valueLiveUpdate="true" liveChange="_validateSaveEnablement" enabled="true" visible="true"
+						value="{ path: 'ID', type: 'sap.ui.model.odata.type.String'}"/>
+					
 						
 				<Label text="{i18n>ECOMPLEXITYTitle}" required="true"/>
 					<Select
