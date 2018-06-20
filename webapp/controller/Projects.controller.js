@@ -402,8 +402,9 @@ sap.ui.define([
 			var sObjectPath = this.getModel().createKey("EffortMatrix", oData);
 			this.getModel("projectsView").setProperty("/itemToSelect", "/" + sObjectPath); //save last created
 			this.getModel("projectsView").setProperty("/busy", false);
-			this.getRouter().navTo("projectDetails", {
+			this.getRouter().navTo("projects", {
 				ID: encodeURIComponent(oData.ID)
+				oViewModel.setProperty("/busy", false);
 			});
 		},
 
