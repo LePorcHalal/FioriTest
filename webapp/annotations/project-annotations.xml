@@ -236,7 +236,14 @@
 							<PropertyValue Property="Label" String="FIT_SUP"/>
 							<PropertyValue Property="Value" Path="FIT_SUP"/>
 						</Record>
-						
+						<Record Type="com.sap.vocabularies.UI.v1.DataField">
+							<PropertyValue Property="Label" String="TECH_ARCH"/>
+							<PropertyValue Property="Value" Path="TECH_ARCH"/>
+						</Record>
+						<Record Type="com.sap.vocabularies.UI.v1.DataField">
+							<PropertyValue Property="Label" String="TECH_LEAD"/>
+							<PropertyValue Property="Value" Path="TECH_LEAD"/>
+						</Record>
 						
 					</Collection>
 				</Annotation>

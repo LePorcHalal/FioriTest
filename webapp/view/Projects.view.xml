@@ -65,18 +65,7 @@
 								</customData>
 								<Text text="GRAND TOTAL" maxLines="2"/>
 							</Column>
-							<Column id="TechLeadlID" width="40px" hAlign="End">
-								<customData>
-									<core:CustomData key="p13nData" value='\{"columnKey": "TechLeadID", "maxLength": "200","columnIndex":"14", "leadingProperty": "TECH_LEAD"}'/>
-								</customData>
-								<Text text="TECH LEAD" maxLines="2"/>
-							</Column>
-							<Column id="TechArchID" width="40px" hAlign="End">
-								<customData>
-									<core:CustomData key="p13nData" value='\{"columnKey": "TechArchID", "maxLength": "200","columnIndex":"13", "leadingProperty": "TECH_ARCH"}'/>
-								</customData>
-								<Text text="TECH ARCH" maxLines="2"/>
-							</Column>
+							
 							<Column id="TechID" width="40px" hAlign="End">
 								<customData>
 									<core:CustomData key="p13nData" value='\{"columnKey": "TechID", "maxLength": "200","columnIndex":"12", "leadingProperty": "TECH"}'/>
