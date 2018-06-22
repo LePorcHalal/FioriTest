@@ -12,7 +12,7 @@ sap.ui.define([
 	"com/beyondtechnologies/model/GroupSortState",
 	"sap/m/MessageToast",
 	"sap/ui/commons/MessageBox"
-	
+
 ], function(BaseController, JSONModel, Filter, FilterOperator, GroupHeaderListItem, Device, formatter, MessageBox, grouper,
 	GroupSortState, MessageToast) {
 	"use strict";
@@ -30,15 +30,13 @@ sap.ui.define([
 		 * @public
 		 */
 		onInit: function() {
-			
-			
-			
+
 			var oTable = this.byId("ProjectsSmartTable"),
 				oViewModel = this._createViewModel(),
 				// Put down smart table's original value for busy indicator delay,
 				// so it can be restored later on. Busy handling on the smart table is
 				// taken care of by the smart table itself.
-			iOriginalBusyDelay = oTable.getBusyIndicatorDelay();
+				iOriginalBusyDelay = oTable.getBusyIndicatorDelay();
 			this._oTableSelector = this.getOwnerComponent().oTableSelector;
 			this._oGroupSortState = new GroupSortState(oViewModel, grouper.GRAND_TOTAL(this.getResourceBundle()));
 			this._oResourceBundle = this.getResourceBundle();
@@ -53,11 +51,7 @@ sap.ui.define([
 				viewTitle: ""
 			});
 			this.setModel(this._oViewModel, "projectsView");
-			
-			
-			
-			
-			
+
 			// Make sure, busy indication is showing immediately so there is no
 			// break after the busy indication for loading the view's meta data is
 			// ended (see promise 'oWhenMetadataIsLoaded' in AppController)
@@ -69,11 +63,9 @@ sap.ui.define([
 			this.getRouter().attachBypassed(this.onBypassed, this);
 			this._oODataModel = this.getOwnerComponent().getModel();
 			this.setInitialSortOrder();
-		
-		
+
 		},
-		
-		
+
 		/* =========================================================== */
 		/* event handlers                                              */
 		/* =========================================================== */
@@ -129,7 +121,7 @@ sap.ui.define([
 		onBypassed: function() {
 			this._oTable.removeSelections(true);
 		},
-		
+
 		handleConfirmationMessageBoxPress: function(oEvent) {
 			var that = this;
 			var bCompact = !!this.getView().$().closest(".sapUiSizeCompact").length;
@@ -138,20 +130,19 @@ sap.ui.define([
 					styleClass: bCompact ? "sapUiSizeCompact" : "",
 					actions: [sap.m.MessageBox.Action.OK, sap.m.MessageBox.Action.CANCEL],
 					onClose: function(sAction) {
-						if(sAction==="OK"){
+						if (sAction === "OK") {
 							that.onSave(oEvent);
 						}
 					}
 				}
-				
+
 			);
 		},
 
-		
-		onSave: function(oEvent){
-			var that=this,
-				oModel=this.getModel();
-				
+		onSave: function(oEvent) {
+			var that = this,
+				oModel = this.getModel();
+
 			this.getModel("projectsView").setProperty("/busy", true);
 			if (this._oViewModel.getProperty("/mode") === "edit") {
 				// attach to the request completed event of the batch
@@ -163,9 +154,8 @@ sap.ui.define([
 						MessageBox.error(that._oResourceBundle.getText("updateError"));
 					}
 				});
-			
-			}
 
+			}
 			oModel.submitChanges();
 		},
 
@@ -192,25 +182,21 @@ sap.ui.define([
 				});
 			}
 		},
-	
-		
-		
-		setInitialSortOrder: function() {
-        var oSmartTable = this.getView().byId("ProjectsSmartTable");            
-        oSmartTable.applyVariant({
-        	
-            sort: {
-                      sortItems: [{ 
-                                     columnKey: "FRICE", 
-                                     operation:"Ascending"
-                      }
-                                 ]
-                   }
-	      
-        	});
-        
-		},
 
+		setInitialSortOrder: function() {
+			var oSmartTable = this.getView().byId("ProjectsSmartTable");
+			oSmartTable.applyVariant({
+
+				sort: {
+					sortItems: [{
+						columnKey: "FRICE",
+						operation: "Ascending"
+					}]
+				}
+
+			});
+
+		},
 
 		/**
 		 * Event handler  (attached declaratively) called when the add button in the master view is pressed. it opens the create view.
@@ -246,7 +232,7 @@ sap.ui.define([
 				// busy: false,
 				// mode: "edit",
 				viewTitle: ""
-				
+
 				// shareOnJamTitle: this.getResourceBundle().getText("projectsTitle"),
 				// shareSendEmailSubject: this.getResourceBundle().getText("shareSendEmailProjectsSubject"),
 				// shareSendEmailMessage: this.getResourceBundle().getText("shareSendEmailProjectsMessage", [location.href])
@@ -276,9 +262,7 @@ sap.ui.define([
 				}
 			});
 		},
-		
 
-		
 		_checkIfBatchRequestSucceeded: function(oEvent) {
 			var oParams = oEvent.getParameters();
 			var aRequests = oEvent.getParameters().requests;
@@ -297,7 +281,7 @@ sap.ui.define([
 				return false;
 			}
 		},
-		
+
 		/**
 		 * Shows the selected item on the detail page
 		 * On phones a additional history entry is created
@@ -318,47 +302,109 @@ sap.ui.define([
 		_fnGetPathWithSlash: function(sPath) {
 			return (sPath.indexOf("/") === 0 ? "" : "/") + sPath;
 		},
-		
-			onDelete: function() {
+
+		onDelete: function() {
 			var that = this;
-			var oViewModel = this.getModel("projectsView"),
-                sPath = oViewModel.getProperty("/sObjectPath"),
-                sObjectHeader = this._oODataModel.getProperty(sPath + "/NAME"),
-                sQuestion = this._oResourceBundle.getText("deleteText", sObjectHeader),
-                sSuccessMessage = this._oResourceBundle.getText("deleteSuccess", sObjectHeader);
+			var sPath, sObjectHeader, sQuestion, sSuccessMessage,
+				oViewModel = this.getModel("appView");
+			this.byId("multiselectTable").getSelectedItems().forEach(function(element) {
 
-			var fnMyAfterDeleted = function() {
-				oViewModel.setProperty("/busy", false);
-				that.onNavBack();
-				MessageToast.show(sSuccessMessage);
-			};
-			this._confirmDeletionByUser({
-				question: sQuestion
-			}, [sPath], fnMyAfterDeleted);
+				sPath = element.getBindingContextPath();
+				sObjectHeader = element.getBindingContext().getProperty("FRICE");
+				sQuestion = that._oResourceBundle.getText("deleteText", sObjectHeader);
+				sSuccessMessage = that._oResourceBundle.getText("deleteSuccess", sObjectHeader);
+
+				var fnMyAfterDeleted = function() {
+					oViewModel.setProperty("/busy", false);
+					MessageToast.show(sSuccessMessage);
+				};
+				that._confirmDeletionByUser({
+					question: sQuestion
+				}, [sPath], fnMyAfterDeleted);
+			});
+
 		},
-		
-		_confirmDeletionByUser: function(oConfirmation, aPaths, fnAfterDeleted, fnDeleteCanceled, fnDeleteConfirmed) {
-            /* eslint-enable */
-            // Callback function for when the user decides to perform the deletion
-            var fnDelete = function() {
-                // Calls the oData Delete service
-                this._callDelete(aPaths, fnAfterDeleted);
-            }.bind(this);
 
-            // Opens the confirmation dialog
-            MessageBox.show(oConfirmation.question, {
-                icon: oConfirmation.icon || MessageBox.Icon.WARNING,
-                title: oConfirmation.title || this._oResourceBundle.getText("delete"),
-                actions: [MessageBox.Action.OK, MessageBox.Action.CANCEL],
-                onClose: function(oAction) {
-                    if (oAction === MessageBox.Action.OK) {
-                        fnDelete();
-                    } else if (fnDeleteCanceled) {
-                        fnDeleteCanceled();
-                    }
-                }
-            });
-        },
+		/**
+		 * Opens a dialog letting the user either confirm or cancel the deletion of a list of entities
+		 * @param {object} oConfirmation - Possesses up to two attributes: question (obligatory) is a string providing the statement presented to the user.
+		 * title (optional) may be a string defining the title of the popup.
+		 * @param {object} oConfirmation - Possesses up to two attributes: question (obligatory) is a string providing the statement presented to the user.
+		 * @param {array} aPaths -  Array of strings representing the context paths to the entities to be deleted. Currently only one is supported.
+		 * @param {callback} fnAfterDeleted (optional) - called after deletion is done. 
+		 * @param {callback} fnDeleteCanceled (optional) - called when the user decides not to perform the deletion
+		 * @param {callback} fnDeleteConfirmed (optional) - called when the user decides to perform the deletion. A Promise will be passed
+		 * @function
+		 * @private
+		 */
+		/* eslint-disable */ // using more then 4 parameters for a function is justified here
+		_confirmDeletionByUser: function(oConfirmation, aPaths, fnAfterDeleted, fnDeleteCanceled, fnDeleteConfirmed) {
+			/* eslint-enable */
+			// Callback function for when the user decides to perform the deletion
+			var fnDelete = function() {
+				// Calls the oData Delete service
+				this._callDelete(aPaths, fnAfterDeleted);
+			}.bind(this);
+
+			// Opens the confirmation dialog
+			MessageBox.show(oConfirmation.question, {
+				icon: oConfirmation.icon || MessageBox.Icon.WARNING,
+				title: oConfirmation.title || this._oResourceBundle.getText("delete"),
+				actions: [MessageBox.Action.OK, MessageBox.Action.CANCEL],
+				onClose: function(oAction) {
+					if (oAction === MessageBox.Action.OK) {
+						fnDelete();
+					} else if (fnDeleteCanceled) {
+						fnDeleteCanceled();
+					}
+				}
+			});
+		},
+
+		/**
+		 * Performs the deletion of a list of entities.
+		 * @param {array} aPaths -  Array of strings representing the context paths to the entities to be deleted. Currently only one is supported.
+		 * @param {callback} fnAfterDeleted (optional) - called after deletion is done. 
+		 * @return a Promise that will be resolved as soon as the deletion process ended successfully.
+		 * @function
+		 * @private
+		 */
+		_callDelete: function(aPaths, fnAfterDeleted) {
+			var oViewModel = this.getModel("projectsView");
+			oViewModel.setProperty("/busy", true);
+			var fnFailed = function() {
+				this._oODataModel.setUseBatch(true);
+			}.bind(this);
+			var fnSuccess = function() {
+				if (fnAfterDeleted) {
+					fnAfterDeleted();
+					this._oODataModel.setUseBatch(true);
+				}
+				oViewModel.setProperty("/busy", false);
+			}.bind(this);
+			return this._deleteOneEntity(aPaths[0], fnSuccess, fnFailed);
+		},
+
+		/**
+		 * Deletes the entity from the odata model
+		 * @param {array} aPaths -  Array of strings representing the context paths to the entities to be deleted. Currently only one is supported.
+		 * @param {callback} fnSuccess - Event handler for success operation.
+		 * @param {callback} fnFailed - Event handler for failure operation.
+		 * @function
+		 * @private
+		 */
+		_deleteOneEntity: function(sPath, fnSuccess, fnFailed) {
+			var oPromise = new Promise(function(fnResolve, fnReject) {
+				this._oODataModel.setUseBatch(false);
+				this._oODataModel.remove(sPath, {
+					success: fnResolve,
+					error: fnReject,
+					async: true
+				});
+			}.bind(this));
+			oPromise.then(fnSuccess, fnFailed);
+			return oPromise;
+		},
 
 		/**
 		 * It navigates to the saved itemToSelect item. After delete it navigate to the next item. 
@@ -383,8 +429,8 @@ sap.ui.define([
 				this._showDetail(oItem);
 			}
 		},
-		
-			/**
+
+		/**
 		 * Handles the success of updating an object
 		 * @private
 		 */
@@ -403,7 +449,11 @@ sap.ui.define([
 			var sObjectPath = this.getModel().createKey("Projects", oData);
 			this.getModel("appView").setProperty("/itemToSelect", "/" + sObjectPath); //save last created
 			this.getModel("appView").setProperty("/busy", false);
-		this.getRouter().navTo("projects");
+
+			this.getRouter().navTo("projectDetails", {
+				ID: encodeURIComponent(oData.ID)
+			});
+
 		},
 
 		/**

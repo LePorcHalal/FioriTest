@@ -62,6 +62,7 @@ sap.ui.define([
 						styleClass: that.getOwnerComponent().getContentDensityClass()
 					}
 				);
+		
 				return;
 			}
 			this.getModel("appView").setProperty("/busy", true);
@@ -75,13 +76,11 @@ sap.ui.define([
 						MessageBox.error(that._oResourceBundle.getText("updateError"));
 					}
 				});
-			}else{
-				
-				
-					this.getRouter().navTo("projects");
 			}
 
 			oModel.submitChanges();
+			
+			this.getRouter().getTargets().display("projects");
 		},
 
 		_checkIfBatchRequestSucceeded: function(oEvent) {
@@ -198,9 +197,7 @@ sap.ui.define([
 			var oContext = this._oODataModel.createEntry("EffortMatrix", {
 				success: this._fnEntityCreated.bind(this),
 				error: this._fnEntityCreationFailed.bind(this),
-				properties: {
-					"ID": "0", // Dummy value to make the OData service accept our entry
-				}
+			
 			});
 			this.getView().setBindingContext(oContext);
 		},
@@ -244,7 +241,26 @@ sap.ui.define([
 				this._oViewModel.setProperty("/enableCreate", true);
 			}
 		},
-
+		
+		checkIfID: function()
+		{
+			var that=this;
+			var inputId = this.byId("ID_id").mProperties.value;
+			var idString= "/EffortMatrix('" + inputId + "')";
+			
+			this.getModel().read(idString,{
+				success: function(){
+					MessageBox.error(
+						"Ce ID a déjà été utilisé."
+				);
+					that.byId("ID_id").mProperties.value="";
+				},
+				error: function(){
+					that.onSave();
+				}
+			
+			});
+		},
 		/**
 		 * Handles the success of updating an object
 		 * @private
@@ -261,7 +277,8 @@ sap.ui.define([
 		 * @private
 		 */
 		_fnEntityCreated: function(oData) {
-			var sObjectPath = this.getModel().createKey("Projects", oData);
+			var sObjectPath = this.getModel().createKey("EffortMatrix",oData);
+			this.getModel("appView").setProperty("/sObjectPath", sObjectPath);
 			this.getModel("appView").setProperty("/itemToSelect", "/" + sObjectPath); //save last created
 			this.getModel("appView").setProperty("/busy", false);
 			this.getRouter().navTo("projects", {
@@ -275,6 +292,7 @@ sap.ui.define([
 		 */
 		_fnEntityCreationFailed: function() {
 			this.getModel("appView").setProperty("/busy", false);
+			this.onCancel();
 		},
 
 		/**
@@ -283,12 +301,13 @@ sap.ui.define([
 		 * @private
 		 */
 		_onDisplay: function(oEvent) {
-			var oData = oEvent.getParameter("data");
+		/*	var oData = oEvent.getParameter("data");
 			if (oData && oData.mode === "update") {
 				this._onEdit(oEvent);
-			} else {
+			} else {   
+		*/
 				this._onCreate(oEvent);
-			}
+		//	}
 		},
 
 		/**

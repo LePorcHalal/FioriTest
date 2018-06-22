@@ -81,12 +81,17 @@
 					<Input name="FIT_SUP" id="FIT_SUP_id" valueLiveUpdate="true" liveChange="_validateSaveEnablement" enabled="true" visible="true"
 					value="{ path: 'FIT_SUP', type: 'sap.ui.model.odata.type.Decimal' }"/>
 					
+					<!--<Label text="{i18n>FIT_SUPTitle}" required="true"/>-->
+					<!--<Input name="FIT_SUP" id="FIT_SUP_id" valueLiveUpdate="true" liveChange="_validateSaveEnablement" enabled="true" visible="true"-->
+					<!--value="{ path: 'FIT_SUP', type: 'sap.ui.model.odata.type.Decimal' }"/>-->
+					
+					
 					
 				</f:content>
 			</f:SimpleForm>
 		</semantic:content>
 		<semantic:saveAction>
-			<semantic:SaveAction id="save" enabled="{viewModel>/enableCreate}" press="onSave"/>
+			<semantic:SaveAction id="save" enabled="{viewModel>/enableCreate}" press="checkIfID"/>
 		</semantic:saveAction>
 		<semantic:cancelAction>
 			<semantic:CancelAction id="cancel" press="onCancel"></semantic:CancelAction>
