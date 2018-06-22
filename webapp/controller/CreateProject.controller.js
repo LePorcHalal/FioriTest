@@ -330,6 +330,53 @@ sap.ui.define([
 				}
 			}
 			return aControls;
+		},
+		
+		_updateFUNC: function(){
+			var FUNC_field=this.byId("FUNC_id"),
+				FS=parseInt(this.byId("FS_id").getProperty("value")),
+				DEV_SUP=parseInt(this.byId("DEV_SUP_id").getProperty("value")),
+				FUT=parseInt(this.byId("FUT_id").getProperty("value"));
+			
+			var FUNC_value= FS+DEV_SUP+FUT;
+			
+			FUNC_field.setValue(FUNC_value);
+			this._updateGrandTotal();
+			
+			
+		},
+		
+		
+		_updateTECH: function(){
+			var TECH_field=this.byId("TECH_id"),
+				FS_SUP=parseInt(this.byId("FS_SUP_id").getProperty("value")),
+				FS_REV=parseInt(this.byId("FS_REV_id").getProperty("value")),
+				TS=parseInt(this.byId("TS_id").getProperty("value")),
+				DEV_UT=parseInt(this.byId("DEV_UT_id").getProperty("value")),
+				FUT_SUP=parseInt(this.byId("FUT_SUP_id").getProperty("value")),
+				FIT_SUP=parseInt(this.byId("FIT_SUP_id").getProperty("value"));
+			
+			var TECH_value=FS_SUP+FS_REV+TS+DEV_UT+FUT_SUP+FIT_SUP;
+			
+			TECH_field.setValue(TECH_value);
+			this._updateGrandTotal();
+		},
+		
+		_updateGrandTotal: function(){
+			var TECH=parseInt(this.byId("TECH_id").getProperty("value")),
+				FUNC=parseInt(this.byId("FUNC_id").getProperty("value")),
+				TECH_ARCH=parseInt(this.byId("TECH_ARCH_id").getProperty("value")),
+				TECH_LEAD=parseInt(this.byId("TECH_LEAD_id").getProperty("value"));
+				
+			var GRAND_TOTAL=TECH+FUNC+TECH_ARCH+TECH_LEAD,
+				GRAND_TOTAL_field=this.byId("GRAND_TOTAL_id");
+				
+			GRAND_TOTAL_field.setValue(GRAND_TOTAL);
+				
+			
+			
+			
+			
 		}
 	});
 
