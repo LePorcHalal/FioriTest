@@ -203,6 +203,7 @@
 							<PropertyValue Property="Value" Path="FS"/>
 							<PropertyValue Property="Label" String="FS"/>
 						</Record>
+						
 							<Record Type="com.sap.vocabularies.UI.v1.DataField">
 							<PropertyValue Property="Label" String="FS_SUP"/>
 							<PropertyValue Property="Value" Path="FS_SUP"/>
@@ -249,27 +250,27 @@
 				</Annotation>
 
 
-				<Annotation Term="com.sap.vocabularies.UI.v1.SelectionFields">
-					<Collection>
-						<PropertyPath>COMPLEXITY</PropertyPath>
-						<PropertyPath>DEV_SUP</PropertyPath>
-						<PropertyPath>DEV_UT</PropertyPath>
-						<PropertyPath>FIT_SUP</PropertyPath>
-						<PropertyPath>FRICE</PropertyPath>
-						<PropertyPath>FS</PropertyPath>
-						<PropertyPath>FS_REV</PropertyPath>
-						<PropertyPath>FS_SUP</PropertyPath>
-						<PropertyPath>FUNC</PropertyPath>
-						<PropertyPath>FUT</PropertyPath>
-						<PropertyPath>FUT_SUP</PropertyPath>
-						<PropertyPath>GRAND_TOTAL</PropertyPath>
-						<PropertyPath>ID</PropertyPath>
-						<PropertyPath>TECH</PropertyPath>
-						<PropertyPath>TECH_ARCH</PropertyPath>
-						<PropertyPath>TECH_LEAD</PropertyPath>
-						<PropertyPath>TS</PropertyPath>
-					</Collection>
-				</Annotation>
+				<!--<Annotation Term="com.sap.vocabularies.UI.v1.SelectionFields">-->
+				<!--	<Collection>-->
+				<!--		<PropertyPath>COMPLEXITY</PropertyPath>-->
+				<!--		<PropertyPath>DEV_SUP</PropertyPath>-->
+				<!--		<PropertyPath>DEV_UT</PropertyPath>-->
+				<!--		<PropertyPath>FIT_SUP</PropertyPath>-->
+				<!--		<PropertyPath>FRICE</PropertyPath>-->
+				<!--		<PropertyPath>FS</PropertyPath>-->
+				<!--		<PropertyPath>FS_REV</PropertyPath>-->
+				<!--		<PropertyPath>FS_SUP</PropertyPath>-->
+				<!--		<PropertyPath>FUNC</PropertyPath>-->
+				<!--		<PropertyPath>FUT</PropertyPath>-->
+				<!--		<PropertyPath>FUT_SUP</PropertyPath>-->
+				<!--		<PropertyPath>GRAND_TOTAL</PropertyPath>-->
+				<!--		<PropertyPath>ID</PropertyPath>-->
+				<!--		<PropertyPath>TECH</PropertyPath>-->
+				<!--		<PropertyPath>TECH_ARCH</PropertyPath>-->
+				<!--		<PropertyPath>TECH_LEAD</PropertyPath>-->
+				<!--		<PropertyPath>TS</PropertyPath>-->
+				<!--	</Collection>-->
+				<!--</Annotation>-->
             </Annotations>
         </Schema>
     </edmx:DataServices>

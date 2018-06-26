@@ -27,7 +27,7 @@
 				
 				
 				<smartTable:SmartTable id="ProjectsSmartTable" entitySet="EffortMatrix"  smartFilterId="smartFilterBar" tableType="ResponsiveTable"
-					useExportToExcel="false" useVariantManagement="false" useTablePersonalisation="true" header="{i18n>Projects}" showRowCount="false"
+					useExportToExcel="true" useVariantManagement="false" useTablePersonalisation="true" header="{i18n>Projects}" showRowCount="false"
 					persistencyKey="SmartTableAnalytical_Explored" editable="false" editTogglable="true" enableAutoBinding="true" app:useSmartField="true"
 					class="sapUiResponsiveContentPadding" >
 					<smartTable:customToolbar>
@@ -90,12 +90,6 @@
 								</cells>
 								<cells>
 									<Text text="{GRAND_TOTAL}"/>
-								</cells>
-								<cells>
-									<Text text="{TECH_LEAD}"/>
-								</cells>
-								<cells>
-									<Text text="{TECH_ARCH}"/>
 								</cells>
 								<cells>
 									<Text text="{TECH}"/>
