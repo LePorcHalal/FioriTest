@@ -11,19 +11,19 @@
 			<PullToRefresh id="pullToRefresh" visible="{device>/support/touch}" refresh="onRefresh"/>
 			<!-- use this to make the table occupy the available screen height -->
 			<VBox fitContainer="true">
-				<smartFilterBar:SmartFilterBar id="smartFilterBar" entityType="EffortMatrixType" persistencyKey="SmartFilter_Explored"
-				    enableBasicSearch="false" filterBarExpanded="false">
-				    <smartFilterBar:controlConfiguration>
-				        <smartFilterBar:ControlConfiguration key="FRICE"/>
-				<smartFilterBar:ControlConfiguration key="CUSTOMER"/>
-				<smartFilterBar:ControlConfiguration key="RESPONSIBLE"/>
-				<smartFilterBar:ControlConfiguration key="DESCRIPTION"/>
-				    </smartFilterBar:controlConfiguration>
+				<!--<smartFilterBar:SmartFilterBar id="smartFilterBar" entityType="EffortMatrixType" persistencyKey="SmartFilter_Explored"-->
+				<!--    enableBasicSearch="false" filterBarExpanded="false">-->
+				<!--    <smartFilterBar:controlConfiguration>-->
+				<!--        <smartFilterBar:ControlConfiguration key="FRICE"/>-->
+				<!--<smartFilterBar:ControlConfiguration key="CUSTOMER"/>-->
+				<!--<smartFilterBar:ControlConfiguration key="RESPONSIBLE"/>-->
+				<!--<smartFilterBar:ControlConfiguration key="DESCRIPTION"/>-->
+				<!--    </smartFilterBar:controlConfiguration>-->
 				<!--layout data used to make the table growing but the filter bar fixed -->
-				    <smartFilterBar:layoutData>
-				        <FlexItemData shrinkFactor="0"/>
-				    </smartFilterBar:layoutData>
-				</smartFilterBar:SmartFilterBar>
+				<!--    <smartFilterBar:layoutData>-->
+				<!--        <FlexItemData shrinkFactor="0"/>-->
+				<!--    </smartFilterBar:layoutData>-->
+				<!--</smartFilterBar:SmartFilterBar>-->
 				
 				
 				<smartTable:SmartTable id="ProjectsSmartTable" entitySet="EffortMatrix"  smartFilterId="smartFilterBar" tableType="ResponsiveTable"
@@ -43,8 +43,6 @@
 					</smartTable:layoutData>
 					<Table id= "multiselectTable" mode="MultiSelect">
 						<columns>
-							
-							
 							<Column id="FRICE" width="110px" hAlign="Begin">
 								<customData>
 									<core:CustomData key="p13nData" value='\{"columnKey": "FRICE", "maxLength": "200","columnIndex":"0", "leadingProperty": "FRICE"}' />

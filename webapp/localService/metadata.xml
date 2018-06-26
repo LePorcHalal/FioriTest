@@ -12,7 +12,7 @@
                     <PropertyRef Name="ID"/>
                 </Key>
                 <Property Name="ID" Type="Edm.String" Nullable="false" MaxLength="40"/>
-                <Property Name="FRICE" Type="Edm.String" Nullable="false" MaxLength="2"/>
+                <Property Name="FRICE" Type="Edm.String" Nullable="false" MaxLength="20"/>
                 <Property Name="COMPLEXITY" Type="Edm.String" Nullable="false" MaxLength="15"/>
                 <Property Name="FS" Type="Edm.Double" Nullable="false"/>
                 <Property Name="FS_SUP" Type="Edm.Double" Nullable="false"/>

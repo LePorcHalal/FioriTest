@@ -33,7 +33,7 @@ sap.ui.define([
 			if (sGroupedBy !== "None") {
 				// If the list is grouped, remove the grouping since the user wants to sort by something different
 				// Grouping only works if the list is primary sorted by the grouping - the first sorten contains a grouper function
-				this._oViewModel.setProperty("/groupBy", "FRICE");
+				
 			}
 
 			return [new Sorter(sKey, false)];
