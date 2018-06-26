@@ -194,6 +194,7 @@
             <!--</Annotations>-->
             
             
+            
             <Annotations Target="com.beyondtechnologies.wricef.services.EffortMatrixType">
             	<Annotation Term="com.sap.vocabularies.UI.v1.LineItem">
 					<Collection>
@@ -245,10 +246,13 @@
 							<PropertyValue Property="Label" String="TECH_LEAD"/>
 							<PropertyValue Property="Value" Path="TECH_LEAD"/>
 						</Record>
+					
+						
 						
 					</Collection>
 				</Annotation>
-
+				
+		
 
 				<!--<Annotation Term="com.sap.vocabularies.UI.v1.SelectionFields">-->
 				<!--	<Collection>-->

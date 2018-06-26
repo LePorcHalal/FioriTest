@@ -185,16 +185,23 @@ sap.ui.define([
 
 		setInitialSortOrder: function() {
 			var oSmartTable = this.getView().byId("ProjectsSmartTable");
-			// oSmartTable.applyVariant({
-
-			// 	sort: {
-			// 		sortItems: [{
-			// 			columnKey: "FRICE",
-			// 			operation: "Ascending"
-			// 		}]
-			// 	}
-
-			// });
+			oSmartTable.applyVariant({
+				
+				group:{
+			
+					groupItems:[{
+						columnKey: "FRICE"
+						
+					}]
+				},
+				sort:{
+					sortItems:[{
+						columnKey:"COMPLEXITY"
+					}]
+				}
+				 
+				
+			});
 
 		},
 
