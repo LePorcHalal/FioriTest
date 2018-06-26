@@ -2,10 +2,17 @@
 	xmlns:footerbar="sap.ushell.ui.footerbar" xmlns:l="sap.ui.layout" xmlns:mvc="sap.ui.core.mvc" xmlns:semantic="sap.m.semantic"
 	xmlns:smart="sap.ui.comp.smartfield" xmlns="sap.m">
 	<semantic:DetailPage id="page" navButtonPress="onNavBack" title="New Effort" busy="{viewModel>/busy}">
+		
+		<semantic:customHeaderContent>
+			
+		</semantic:customHeaderContent>
 		<semantic:content>
+			
 			<f:SimpleForm class="editableForm" columnsL="1" columnsM="1" editable="true" emptySpanL="4" emptySpanM="4" id="newEntitySimpleForm"
 				labelSpanL="3" labelSpanM="3" layout="ResponsiveGridLayout" maxContainerCols="2" minWidth="1024"
 				title="{= ${viewModel>/mode} === 'edit'? ${i18n>editProjectTitle} : ${i18n>createProjectTitle} }">
+				
+				
 				<f:content>
 					<!--<Input name="ID" enabled="true" visible="false" value="0"/>-->
 					
@@ -23,6 +30,7 @@
 			<!--		<core:Item text="{Name}" />-->
 			<!--	</suggestionItems>-->
 			<!--</Input>-->
+			
 			
 			
 				<Label text="Id" required="true"/>

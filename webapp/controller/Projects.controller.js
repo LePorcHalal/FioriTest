@@ -1,4 +1,5 @@
 /*global history */
+/*eslint-disable no-console, no-alert */
 sap.ui.define([
 	"com/beyondtechnologies/controller/BaseController",
 	"sap/ui/model/json/JSONModel",
@@ -445,6 +446,10 @@ sap.ui.define([
 			this.getModel("appView").setProperty("/busy", false);
 			this.getView().unbindObject();
 			this.getRouter().getTargets().display("projectDetails");
+		},
+		
+		onEditField: function(oEvent){
+			console.log("max");
 		},
 
 		/**

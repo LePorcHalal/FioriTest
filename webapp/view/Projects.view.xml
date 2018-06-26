@@ -28,7 +28,7 @@
 				
 				<smartTable:SmartTable id="ProjectsSmartTable" entitySet="EffortMatrix"  smartFilterId="smartFilterBar" tableType="ResponsiveTable"
 					useExportToExcel="true" useVariantManagement="false" useTablePersonalisation="true" header="{i18n>Projects}" showRowCount="false"
-					persistencyKey="SmartTableAnalytical_Explored" editable="false" editTogglable="true" enableAutoBinding="true" app:useSmartField="true"
+					persistencyKey="SmartTableAnalytical_Explored" editable="false"  fieldChange="onEditField" editTogglable="true" enableAutoBinding="true" app:useSmartField="true"
 					class="sapUiResponsiveContentPadding" requestAtLeastFields="FRICE">
 					<smartTable:customToolbar>
 						<OverflowToolbar design="Transparent">

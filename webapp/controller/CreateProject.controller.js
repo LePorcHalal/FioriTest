@@ -342,6 +342,7 @@ sap.ui.define([
 			
 			FUNC_field.setValue(FUNC_value);
 			this._updateGrandTotal();
+				this._validateSaveEnablement();
 			
 			
 		},
@@ -360,6 +361,7 @@ sap.ui.define([
 			
 			TECH_field.setValue(TECH_value);
 			this._updateGrandTotal();
+				this._validateSaveEnablement();
 		},
 		
 		_updateGrandTotal: function(){
@@ -372,7 +374,7 @@ sap.ui.define([
 				GRAND_TOTAL_field=this.byId("GRAND_TOTAL_id");
 				
 			GRAND_TOTAL_field.setValue(GRAND_TOTAL);
-				
+				this._validateSaveEnablement();
 			
 			
 			
