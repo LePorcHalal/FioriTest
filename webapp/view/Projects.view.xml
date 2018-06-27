@@ -49,7 +49,7 @@
 								</customData>
 								<Text text="FRICE"/>
 							</Column>
-							<Column id="ComplexityID" width="110px" hAlign="Begin">
+							<Column id="ComplexityID" width="90px" hAlign="Begin">
 								<customData>
 									<core:CustomData key="p13nData"
 										value='\{"columnKey": "COMPLEXITY", "columnIndex":"1", "filterProperty":"COMPLEXITY", "sortProperty":"COMPLEXITY", "leadingProperty":"COMPLEXITY"}'/>

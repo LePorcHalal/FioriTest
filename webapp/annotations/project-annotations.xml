@@ -205,12 +205,12 @@
 							<PropertyValue Property="Label" String="FS"/>
 						</Record>
 						
-							<Record Type="com.sap.vocabularies.UI.v1.DataField">
-							<PropertyValue Property="Label" String="FS_SUP"/>
+						<Record Type="com.sap.vocabularies.UI.v1.DataField">
+							<PropertyValue Property="Label" String="FS SUP"/>
 							<PropertyValue Property="Value" Path="FS_SUP"/>
 						</Record>
 							<Record Type="com.sap.vocabularies.UI.v1.DataField">
-							<PropertyValue Property="Label" String="FS_REV"/>
+							<PropertyValue Property="Label" String="FS REV"/>
 							<PropertyValue Property="Value" Path="FS_REV"/>
 						</Record>
 							<Record Type="com.sap.vocabularies.UI.v1.DataField">
@@ -218,12 +218,12 @@
 							<PropertyValue Property="Value" Path="TS"/>
 						</Record>
 						<Record Type="com.sap.vocabularies.UI.v1.DataField">
-							<PropertyValue Property="Label" String="DEV_UT"/>
+							<PropertyValue Property="Label" String="DEV UT"/>
 							<PropertyValue Property="Value" Path="DEV_UT"/>
 						</Record>
 						
 						<Record Type="com.sap.vocabularies.UI.v1.DataField">
-							<PropertyValue Property="Label" String="DEV_SUP"/>
+							<PropertyValue Property="Label" String="DEV SUP"/>
 							<PropertyValue Property="Value" Path="DEV_SUP"/>
 						</Record>
 						<Record Type="com.sap.vocabularies.UI.v1.DataField">
@@ -231,19 +231,19 @@
 							<PropertyValue Property="Value" Path="FUT"/>
 						</Record>
 							<Record Type="com.sap.vocabularies.UI.v1.DataField">
-							<PropertyValue Property="Label" String="FUT_SUP"/>
-							<PropertyValue Property="Value" Path="FUT_SUP"/>
+							<PropertyValue Property="Label" String="FUT SUP"/>
+							<PropertyValue Property="Value" Path="FUT SUP"/>
 						</Record>
 						<Record Type="com.sap.vocabularies.UI.v1.DataField">
-							<PropertyValue Property="Label" String="FIT_SUP"/>
+							<PropertyValue Property="Label" String="FIT SUP"/>
 							<PropertyValue Property="Value" Path="FIT_SUP"/>
 						</Record>
 						<Record Type="com.sap.vocabularies.UI.v1.DataField">
-							<PropertyValue Property="Label" String="TECH_ARCH"/>
+							<PropertyValue Property="Label" String="TECH ARCH"/>
 							<PropertyValue Property="Value" Path="TECH_ARCH"/>
 						</Record>
 						<Record Type="com.sap.vocabularies.UI.v1.DataField">
-							<PropertyValue Property="Label" String="TECH_LEAD"/>
+							<PropertyValue Property="Label" String="TECH LEAD"/>
 							<PropertyValue Property="Value" Path="TECH_LEAD"/>
 						</Record>
 					
