@@ -294,7 +294,8 @@ sap.ui.define([
 			this.getModel("appView").setProperty("/busy", false);
 			this.onCancel();
 		},
-
+		
+		
 		/**
 		 * Handles the onDisplay event which is triggered when this view is displayed 
 		 * @param {sap.ui.base.Event} oEvent the on display event
@@ -331,19 +332,43 @@ sap.ui.define([
 			}
 			return aControls;
 		},
-		_undefinedToZero: function(value){
-		if (isNaN(value)) {
-			 return 0;
-			}else{
-				return value;
-			}
+		
+		/**
+		 * Remove the spaces from the string that came from the input of "CreateProject"
+		 *@param {string} the input value of "CreateProject"
+		 * @private
+		 */
+		_removeSpaces: function(value){
+			
+		return  value.replace(/\s/g, '');
+		
 		},
 		
+		/**
+		 * Changes un undefined value (NaN) to "0"
+		 *@param {integer} 
+		 * @private
+		 */
+		_naNToZero: function(value){
+	
+			if (isNaN(value)) {
+				
+				 return 0;
+				 
+				}else{
+				
+					return value;
+				}
+		},
+		/**
+		 * Updates the value of "FUNC"
+		 * @private
+		 */		
 		_updateFUNC: function(){
 			var FUNC_field=this.byId("FUNC_id"),
-				FS=this._undefinedToZero(parseInt(this.byId("FS_id").getProperty("value"))),
-				DEV_SUP=this._undefinedToZero(parseInt(this.byId("DEV_SUP_id").getProperty("value"))),
-				FUT=this._undefinedToZero(parseInt(this.byId("FUT_id").getProperty("value")));
+				FS=this._naNToZero(parseInt(this._removeSpaces(this.byId("FS_id").getProperty("value")))),
+				DEV_SUP=this._naNToZero(parseInt(this._removeSpaces(this.byId("DEV_SUP_id").getProperty("value")))),
+				FUT=this._naNToZero(parseInt(this._removeSpaces(this.byId("FUT_id").getProperty("value"))));
 			
 			var FUNC_value= FS+DEV_SUP+FUT;
 			
@@ -354,15 +379,18 @@ sap.ui.define([
 			
 		},
 		
-		
+		/**
+		 * Updates the value of "TECH"
+		 * @private
+		 */	
 		_updateTECH: function(){
 			var TECH_field=this.byId("TECH_id"),
-				FS_SUP=this._undefinedToZero(parseInt(this.byId("FS_SUP_id").getProperty("value"))),
-				FS_REV=this._undefinedToZero(parseInt(this.byId("FS_REV_id").getProperty("value"))),
-				TS=this._undefinedToZero(parseInt(this.byId("TS_id").getProperty("value"))),
-				DEV_UT=this._undefinedToZero(parseInt(this.byId("DEV_UT_id").getProperty("value"))),
-				FUT_SUP=this._undefinedToZero(parseInt(this.byId("FUT_SUP_id").getProperty("value"))),
-				FIT_SUP=this._undefinedToZero(parseInt(this.byId("FIT_SUP_id").getProperty("value")));
+				FS_SUP=this._naNToZero(parseInt(this._removeSpaces(this.byId("FS_SUP_id").getProperty("value")))),
+				FS_REV=this._naNToZero(parseInt(this._removeSpaces(this.byId("FS_REV_id").getProperty("value")))),
+				TS=this._naNToZero(parseInt(this._removeSpaces(this.byId("TS_id").getProperty("value")))),
+				DEV_UT=this._naNToZero(parseInt(this._removeSpaces(this.byId("DEV_UT_id").getProperty("value")))),
+				FUT_SUP=this._naNToZero(parseInt(this._removeSpaces(this.byId("FUT_SUP_id").getProperty("value")))),
+				FIT_SUP=this._naNToZero(parseInt(this._removeSpaces(this.byId("FIT_SUP_id").getProperty("value"))));
 			
 			var TECH_value=FS_SUP+FS_REV+TS+DEV_UT+FUT_SUP+FIT_SUP;
 			
@@ -370,12 +398,15 @@ sap.ui.define([
 			this._updateGrandTotal();
 			this._validateSaveEnablement();
 		},
-		
+		/**
+		 * Updates the value of "GRAND_TOTAL"
+		 * @private
+		 */	
 		_updateGrandTotal: function(){
-			var TECH=this._undefinedToZero(parseInt(this.byId("TECH_id").getProperty("text"))),
-				FUNC=this._undefinedToZero(parseInt(this.byId("FUNC_id").getProperty("text"))),
-				TECH_ARCH=this._undefinedToZero(parseInt(this.byId("TECH_ARCH_id").getProperty("value"))),
-				TECH_LEAD=this._undefinedToZero(parseInt(this.byId("TECH_LEAD_id").getProperty("value")));
+			var TECH=this._naNToZero(parseInt(this._removeSpaces(this.byId("TECH_id").getProperty("text")))),
+				FUNC=this._naNToZero(parseInt(this._removeSpaces(this.byId("FUNC_id").getProperty("text")))),
+				TECH_ARCH=this._naNToZero(parseInt(this._removeSpaces(this.byId("TECH_ARCH_id").getProperty("value")))),
+				TECH_LEAD=this._naNToZero(parseInt(this._removeSpaces(this.byId("TECH_LEAD_id").getProperty("value"))));
 				
 			var GRAND_TOTAL=TECH+FUNC+TECH_ARCH+TECH_LEAD,
 				GRAND_TOTAL_field=this.byId("GRAND_TOTAL_id");
