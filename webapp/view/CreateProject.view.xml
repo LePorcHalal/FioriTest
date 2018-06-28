@@ -83,7 +83,7 @@
 					
 					<Label text="{i18n>FIT_SUPTitle}" required="true"/>
 					<Input name="FIT_SUP" id="FIT_SUP_id" valueLiveUpdate="true" liveChange="_updateTECH" enabled="true" visible="true"
-					value="{ path: 'FIT_SUP', type: 'sap.ui.model.odata.type.Decimal' constraints}"/>
+					value="{ path: 'FIT_SUP', type: 'sap.ui.model.odata.type.Decimal'}"/>
 					
 					<!--<Label text="{i18n>FUNC}" required="false"/>-->
 					<!--<Input name="FUNC" id="FUNC_id" valueLiveUpdate="true"  enabled="false" visible="true"-->
