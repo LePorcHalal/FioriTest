@@ -232,7 +232,7 @@
 						</Record>
 							<Record Type="com.sap.vocabularies.UI.v1.DataField">
 							<PropertyValue Property="Label" String="FUT SUP"/>
-							<PropertyValue Property="Value" Path="FUT SUP"/>
+							<PropertyValue Property="Value" Path="FUT_SUP"/>
 						</Record>
 						<Record Type="com.sap.vocabularies.UI.v1.DataField">
 							<PropertyValue Property="Label" String="FIT SUP"/>
