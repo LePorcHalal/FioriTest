@@ -448,9 +448,104 @@ sap.ui.define([
 			this.getRouter().getTargets().display("projectDetails");
 		},
 		
+		functionTest: function(func){
+			setTimeout(func(), 0);
+
+		},
+		
+	
+		
 		onEditField: function(oEvent){
 			console.log("max");
-		},
+			var FS, FS_SUP, FS_REV, TS, DEV_UT, DEV_SUP, FUT, FIT_SUP, FUT_SUP, TECH_ARCH, TECH_LEAD, TECH, FUNC, GRAND_TOTAL,
+				pendingChanges = this.getModel().getPendingChanges()[sap.ui.getCore().byId(oEvent.getParameter("changeEvent").getParameter("id")).getBindingContext().getPath().substr(1)],
+				 originalProperty=this.getModel().getOriginalProperty(sap.ui.getCore().byId(oEvent.getParameter("changeEvent").getParameter("id")).getBindingContext().getPath());
+			if(pendingChanges.FS!==undefined){
+				FS=parseFloat(pendingChanges.FS);
+			}else{
+				FS=parseFloat(originalProperty.FS);
+			}
+			
+			if(pendingChanges.FS_SUP!==undefined){
+				FS_SUP=parseFloat(pendingChanges.FS_SUP);
+			}else{
+				FS_SUP=parseFloat(originalProperty.FS_SUP);
+			}
+			
+			if(pendingChanges.FS_REV!==undefined){
+				FS_REV=parseFloat(pendingChanges.FS_REV);
+			}else{
+				FS_REV=parseFloat(originalProperty.FS_REV);
+			}
+			
+			if(pendingChanges.TS!==undefined){
+				TS=parseFloat(pendingChanges.TS);
+			}else{
+				TS=parseFloat(originalProperty.TS);
+			}
+			
+			if(pendingChanges.DEV_UT!==undefined){
+				DEV_UT=parseFloat(pendingChanges.DEV_UT);
+			}else{
+				DEV_UT=parseFloat(originalProperty.DEV_UT);
+			}
+		
+			if(pendingChanges.DEV_SUP!==undefined){
+				DEV_SUP=parseFloat(pendingChanges.DEV_SUP);
+			}else{
+				DEV_SUP=parseFloat(originalProperty.DEV_SUP);
+			}
+		
+			if(pendingChanges.FUT!==undefined){
+				FUT=parseFloat(pendingChanges.FUT);
+			}else{
+				FUT=parseFloat(originalProperty.FUT);
+			}
+			
+			if(pendingChanges.FUT_SUP!==undefined){
+				FUT_SUP=parseFloat(pendingChanges.FUT_SUP);
+			}else{
+				FUT_SUP=parseFloat(originalProperty.FUT_SUP);
+			}
+			
+			if(pendingChanges.FIT_SUP!==undefined){
+				FIT_SUP=parseFloat(pendingChanges.FIT_SUP);
+			}else{
+				FIT_SUP=parseFloat(originalProperty.FIT_SUP);
+			}
+			
+			if(pendingChanges.TECH_ARCH!==undefined){
+				TECH_ARCH=parseFloat(pendingChanges.TECH_ARCH);
+			}else{
+				TECH_ARCH=parseFloat(originalProperty.TECH_ARCH);
+			}
+			
+			if(pendingChanges.TECH_LEAD!==undefined){
+				TECH_LEAD=parseFloat(pendingChanges.TECH_LEAD);
+			}else{
+				TECH_LEAD=parseFloat(originalProperty.TECH_LEAD);
+			}
+			FUNC= FS+DEV_SUP+FUT;
+			TECH=FS_SUP+FS_REV+TS+DEV_UT+FUT_SUP+FIT_SUP;
+			GRAND_TOTAL=FUNC+TECH+TECH_ARCH+TECH_LEAD;
+			var that=this;
+			
+			this.functionTest(function(){
+		
+				that.getModel().setProperty(sap.ui.getCore().byId(oEvent.getParameter("changeEvent").getParameter("id")).getBindingContext().getPath()+"/FUNC",FUNC);
+		
+				that.getModel().setProperty(sap.ui.getCore().byId(oEvent.getParameter("changeEvent").getParameter("id")).getBindingContext().getPath()+"/TECH", TECH);
+		
+			});
+			
+	//		this.getModel().setProperty(sap.ui.getCore().byId(oEvent.getParameter("changeEvent").getParameter("id")).getBindingContext().getPath()+"/GRAND_TOTAL",);
+			
+			
+			
+			
+			
+			
+			},
 
 		/**
 		 * Handles the success of creating an object
