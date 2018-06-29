@@ -39,7 +39,7 @@ sap.ui.define([
 				// taken care of by the smart table itself.
 				iOriginalBusyDelay = oTable.getBusyIndicatorDelay();
 			this._oTableSelector = this.getOwnerComponent().oTableSelector;
-		//	this._oGroupSortState = new GroupSortState(oViewModel, grouper.GRAND_TOTAL(this.getResourceBundle()));
+	
 			this._oResourceBundle = this.getResourceBundle();
 			this._oTable = oTable;
 			// keeps the filter and search state

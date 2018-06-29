@@ -16,6 +16,7 @@ sap.ui.define([
 
 		onInit: function() {
 			var that = this;
+			
 			this.getRouter().getTargets().getTarget("createProject").attachDisplay(null, this._onDisplay, this);
 			this._oODataModel = this.getOwnerComponent().getModel();
 			this._oResourceBundle = this.getResourceBundle();
@@ -24,7 +25,19 @@ sap.ui.define([
 				delay: 0,
 				busy: false,
 				mode: "create",
-				viewTitle: ""
+				viewTitle: "",
+				FS:"",
+				FS_SUP:"",
+				FS_REV:"",
+				TS:"",
+				DEV_UT:"",
+				DEV_SUP:"",
+				FUT:"",
+				FUT_SUP:"",
+				FIT_SUP:"",
+				TECH_ARCH:"",
+				TECH_LEAD:""
+		
 			});
 			this.setModel(this._oViewModel, "viewModel");
 
@@ -66,23 +79,30 @@ sap.ui.define([
 				return;
 			}
 			this.getModel("appView").setProperty("/busy", true);
-			if (this._oViewModel.getProperty("/mode") === "edit") {
-				// attach to the request completed event of the batch
-				oModel.attachEventOnce("batchRequestCompleted", function(oEvent) {
-					if (that._checkIfBatchRequestSucceeded(oEvent)) {
-						that._fnUpdateSuccess();
-					} else {
-						that._fnEntityCreationFailed();
-						MessageBox.error(that._oResourceBundle.getText("updateError"));
-					}
-				});
-			}
-
-			oModel.submitChanges();
 			
+			this._updateChangedEntities();		
+			oModel.submitChanges();
 			this.getRouter().getTargets().display("projects");
 		},
-
+		
+		_updateChangedEntities: function(){
+			this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/FS","" + this._oViewModel.getData().FS);
+			this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/FS_SUP",""+this._oViewModel.getData().FS_SUP);
+			this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/FS_REV","" + this._oViewModel.getData().FS_REV);
+			this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/DEV_UT","" + this._oViewModel.getData().DEV_UT);
+			this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/DEV_SUP","" + this._oViewModel.getData().DEV_SUP);
+			this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/FUT","" + this._oViewModel.getData().FUT);
+			this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/TS","" + this._oViewModel.getData().TS);
+			this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/FUT_SUP","" + this._oViewModel.getData().FUT_SUP);
+			this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/FIT_SUP","" + this._oViewModel.getData().FIT_SUP);
+			this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/TECH_ARCH","" + this._oViewModel.getData().TECH_ARCH);
+			this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/TECH_LEAD","" + this._oViewModel.getData().TECH_LEAD);
+			
+			
+			
+		},
+		
+		
 		_checkIfBatchRequestSucceeded: function(oEvent) {
 			var oParams = oEvent.getParameters();
 			var aRequests = oEvent.getParameters().requests;
@@ -242,9 +262,17 @@ sap.ui.define([
 			}
 		},
 		
-		checkIfID: function()
+		checkIfID: function(oEvent)
 		{
+			var max;
+			this.getModel().read("/EffortMatrix", { 
+			success: function(oData){
+				console.log("max");
+				max=oData;
+			}
+			});
 			var that=this;
+			
 			var inputId = this.byId("ID_id").mProperties.value;
 			var idString= "/EffortMatrix('" + inputId + "')";
 			
@@ -256,10 +284,11 @@ sap.ui.define([
 					that.byId("ID_id").mProperties.value="";
 				},
 				error: function(){
-					that.onSave();
+					that.onSave(oEvent);
 				}
 			
 			});
+			console.log("max");
 		},
 		/**
 		 * Handles the success of updating an object
@@ -366,6 +395,7 @@ sap.ui.define([
 		 * @private
 		 */		
 		_updateFUNC: function(){
+			
 			var FUNC_field=this.byId("FUNC_id"),
 				FS=this._naNToZero(parseFloat(this._removeSpaces(this.byId("FS_id").getProperty("value")))),
 				DEV_SUP=this._naNToZero(parseFloat(this._removeSpaces(this.byId("DEV_SUP_id").getProperty("value")))),
@@ -373,11 +403,12 @@ sap.ui.define([
 			
 			var FUNC_value= FS+DEV_SUP+FUT;
 			
+		
 			FUNC_field.setText(FUNC_value);
 			this._updateGrandTotal();
 			this._validateSaveEnablement();
 			
-			
+		
 		},
 		
 		/**
@@ -385,6 +416,7 @@ sap.ui.define([
 		 * @private
 		 */	
 		_updateTECH: function(){
+			
 			var TECH_field=this.byId("TECH_id"),
 				FS_SUP=this._naNToZero(parseFloat(this._removeSpaces(this.byId("FS_SUP_id").getProperty("value")))),
 				FS_REV=this._naNToZero(parseFloat(this._removeSpaces(this.byId("FS_REV_id").getProperty("value")))),
@@ -398,12 +430,14 @@ sap.ui.define([
 			TECH_field.setText(TECH_value);
 			this._updateGrandTotal();
 			this._validateSaveEnablement();
+			
 		},
 		/**
 		 * Updates the value of "GRAND_TOTAL"
 		 * @private
 		 */	
 		_updateGrandTotal: function(){
+			
 			var TECH=this._naNToZero(parseFloat(this._removeSpaces(this.byId("TECH_id").getProperty("text")))),
 				FUNC=this._naNToZero(parseFloat(this._removeSpaces(this.byId("FUNC_id").getProperty("text")))),
 				TECH_ARCH=this._naNToZero(parseFloat(this._removeSpaces(this.byId("TECH_ARCH_id").getProperty("value")))),
@@ -415,7 +449,7 @@ sap.ui.define([
 			GRAND_TOTAL_field.setText(GRAND_TOTAL);
 			this._validateSaveEnablement();
 			
-			
+		
 			
 			
 		}
