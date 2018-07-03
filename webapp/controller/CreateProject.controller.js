@@ -16,7 +16,7 @@ sap.ui.define([
 
 		onInit: function() {
 			var that = this;
-			
+
 			this.getRouter().getTargets().getTarget("createProject").attachDisplay(null, this._onDisplay, this);
 			this._oODataModel = this.getOwnerComponent().getModel();
 			this._oResourceBundle = this.getResourceBundle();
@@ -26,21 +26,21 @@ sap.ui.define([
 				busy: false,
 				mode: "create",
 				viewTitle: "",
-				FS:"",
-				FS_SUP:"",
-				FS_REV:"",
-				TS:"",
-				DEV_UT:"",
-				DEV_SUP:"",
-				FUT:"",
-				FUT_SUP:"",
-				FIT_SUP:"",
-				TECH_ARCH:"",
-				TECH_LEAD:""
-		
+				FS: "",
+				FS_SUP: "",
+				FS_REV: "",
+				TS: "",
+				DEV_UT: "",
+				DEV_SUP: "",
+				FUT: "",
+				FUT_SUP: "",
+				FIT_SUP: "",
+				TECH_ARCH: "",
+				TECH_LEAD: "",
+				dataArray:""
 			});
 			this.setModel(this._oViewModel, "viewModel");
-
+			
 			// Register the view with the message manager
 			sap.ui.getCore().getMessageManager().registerObject(this.getView(), true);
 			var oMessagesModel = sap.ui.getCore().getMessageManager().getMessageModel();
@@ -53,6 +53,7 @@ sap.ui.define([
 					}
 				}
 			});
+			
 		},
 
 		/* =========================================================== */
@@ -75,34 +76,46 @@ sap.ui.define([
 						styleClass: that.getOwnerComponent().getContentDensityClass()
 					}
 				);
-		
+
 				return;
 			}
 			this.getModel("appView").setProperty("/busy", true);
-			
-			this._updateChangedEntities();		
+
+			this._updateChangedEntities();
 			oModel.submitChanges();
 			this.getRouter().getTargets().display("projects");
+			this._resetDataFields();
 		},
 		
-		_updateChangedEntities: function(){
-			this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/FS","" + this._oViewModel.getData().FS);
-			this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/FS_SUP",""+this._oViewModel.getData().FS_SUP);
-			this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/FS_REV","" + this._oViewModel.getData().FS_REV);
-			this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/DEV_UT","" + this._oViewModel.getData().DEV_UT);
-			this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/DEV_SUP","" + this._oViewModel.getData().DEV_SUP);
-			this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/FUT","" + this._oViewModel.getData().FUT);
-			this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/TS","" + this._oViewModel.getData().TS);
-			this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/FUT_SUP","" + this._oViewModel.getData().FUT_SUP);
-			this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/FIT_SUP","" + this._oViewModel.getData().FIT_SUP);
-			this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/TECH_ARCH","" + this._oViewModel.getData().TECH_ARCH);
-			this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/TECH_LEAD","" + this._oViewModel.getData().TECH_LEAD);
-			
-			
-			
+		_resetDataFields: function(){
+			this._oViewModel.setProperty("/FS", "");
+			this._oViewModel.setProperty("/FS_SUP", "");
+			this._oViewModel.setProperty("/FS_REV", "");
+			this._oViewModel.setProperty("/TS", "");
+			this._oViewModel.setProperty("/DEV_UT", "");
+			this._oViewModel.setProperty("/DEV_SUP", "");
+			this._oViewModel.setProperty("/FUT", "");
+			this._oViewModel.setProperty("/FUT_SUP", "");
+			this._oViewModel.setProperty("/FIT_SUP", "");
+			this._oViewModel.setProperty("/TECH_ARCH", "");
+			this._oViewModel.setProperty("/TECH_LEAD", "");
 		},
-		
-		
+
+		_updateChangedEntities: function() {
+			this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/FS", "" + this._oViewModel.getData().FS);
+			this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/FS_SUP", "" + this._oViewModel.getData().FS_SUP);
+			this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/FS_REV", "" + this._oViewModel.getData().FS_REV);
+			this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/DEV_UT", "" + this._oViewModel.getData().DEV_UT);
+			this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/DEV_SUP", "" + this._oViewModel.getData().DEV_SUP);
+			this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/FUT", "" + this._oViewModel.getData().FUT);
+			this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/TS", "" + this._oViewModel.getData().TS);
+			this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/FUT_SUP", "" + this._oViewModel.getData().FUT_SUP);
+			this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/FIT_SUP", "" + this._oViewModel.getData().FIT_SUP);
+			this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/TECH_ARCH", "" + this._oViewModel.getData().TECH_ARCH);
+			this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/TECH_LEAD", "" + this._oViewModel.getData().TECH_LEAD);
+
+		},
+
 		_checkIfBatchRequestSucceeded: function(oEvent) {
 			var oParams = oEvent.getParameters();
 			var aRequests = oEvent.getParameters().requests;
@@ -157,6 +170,7 @@ sap.ui.define([
 				history.go(-1);
 			} else {
 				this.getRouter().getTargets().display("projects");
+					this._resetDataFields();
 			}
 		},
 
@@ -217,7 +231,7 @@ sap.ui.define([
 			var oContext = this._oODataModel.createEntry("EffortMatrix", {
 				success: this._fnEntityCreated.bind(this),
 				error: this._fnEntityCreationFailed.bind(this),
-			
+
 			});
 			this.getView().setBindingContext(oContext);
 		},
@@ -262,33 +276,46 @@ sap.ui.define([
 			}
 		},
 		
-		checkIfID: function(oEvent)
-		{
-			var max;
-			this.getModel().read("/EffortMatrix", { 
-			success: function(oData){
-				console.log("max");
-				max=oData;
-			}
-			});
-			var that=this;
-			
+		checkIfID: function(oEvent) {
+	
+			var that = this;
+			var exitFunction=false;
 			var inputId = this.byId("ID_id").mProperties.value;
-			var idString= "/EffortMatrix('" + inputId + "')";
+			var idString = "/EffortMatrix('" + inputId + "')";
 			
-			this.getModel().read(idString,{
-				success: function(){
+		
+			for(var temp in this.getModel().oData){
+				if(this.getModel().getProperty("/" + temp + "/FRICE")===this.byId("FRICE_id").getProperty("value") && 
+				this.getModel().getProperty("/" + temp + "/COMPLEXITY")===this.byId("COMPLEXITY_id").getProperty("selectedKey")&&
+				this.getModel().getPendingChanges()[temp]===undefined){
+				
+					MessageBox.error(
+						"Cette combinaison de COMPLEXITY et FRICE a déjà été utilisée."
+					);
+					exitFunction=true;
+					break;
+				}
+			}
+		if(exitFunction===true){
+			return;
+		}
+			
+	
+
+			this.getModel().read(idString, {
+				success: function() {
 					MessageBox.error(
 						"Ce ID a déjà été utilisé."
-				);
-					that.byId("ID_id").mProperties.value="";
+					);
+					that.byId("ID_id").mProperties.value = "";
 				},
-				error: function(){
+				error: function() {
 					that.onSave(oEvent);
 				}
-			
+
 			});
-			console.log("max");
+	
+		
 		},
 		/**
 		 * Handles the success of updating an object
@@ -298,6 +325,7 @@ sap.ui.define([
 			this.getModel("appView").setProperty("/busy", false);
 			this.getView().unbindObject();
 			this.getRouter().getTargets().display("projects");
+			this._resetDataFields();
 		},
 
 		/**
@@ -306,14 +334,15 @@ sap.ui.define([
 		 * @private
 		 */
 		_fnEntityCreated: function(oData) {
-			var sObjectPath = this.getModel().createKey("EffortMatrix",oData);
+			var sObjectPath = this.getModel().createKey("EffortMatrix", oData);
 			this.getModel("appView").setProperty("/sObjectPath", sObjectPath);
 			this.getModel("appView").setProperty("/itemToSelect", "/" + sObjectPath); //save last created
 			this.getModel("appView").setProperty("/busy", false);
+			this._resetDataFields();
 			this.getRouter().navTo("projects", {
 				ID: encodeURIComponent(oData.ID)
 			});
-			
+
 		},
 
 		/**
@@ -324,21 +353,20 @@ sap.ui.define([
 			this.getModel("appView").setProperty("/busy", false);
 			this.onCancel();
 		},
-		
-		
+
 		/**
 		 * Handles the onDisplay event which is triggered when this view is displayed 
 		 * @param {sap.ui.base.Event} oEvent the on display event
 		 * @private
 		 */
 		_onDisplay: function(oEvent) {
-		/*	var oData = oEvent.getParameter("data");
-			if (oData && oData.mode === "update") {
-				this._onEdit(oEvent);
-			} else {   
-		*/
-				this._onCreate(oEvent);
-		//	}
+			/*	var oData = oEvent.getParameter("data");
+				if (oData && oData.mode === "update") {
+					this._onEdit(oEvent);
+				} else {   
+			*/
+			this._onCreate(oEvent);
+			//	}
 		},
 
 		/**
@@ -362,96 +390,92 @@ sap.ui.define([
 			}
 			return aControls;
 		},
-		
+
 		/**
 		 * Remove the spaces from the string that came from the input of "CreateProject"
 		 *@param {string} the input value of "CreateProject"
 		 * @private
 		 */
-		_removeSpaces: function(value){
-			
-		return  value.replace(/\s/g, '');
-		
+		_removeSpaces: function(value) {
+
+			return value.replace(/\s/g, '');
+
 		},
-		
+	
+
 		/**
 		 * Changes un undefined value (NaN) to "0"
 		 *@param {integer} 
 		 * @private
 		 */
-		_naNToZero: function(value){
-	
+		_naNToZero: function(value) {
+
 			if (isNaN(value)) {
-				
-				 return 0;
-				 
-				}else{
-				
-					return value;
-				}
+
+				return 0;
+
+			} else {
+
+				return value;
+			}
 		},
 		/**
 		 * Updates the value of "FUNC"
 		 * @private
-		 */		
-		_updateFUNC: function(){
-			
-			var FUNC_field=this.byId("FUNC_id"),
-				FS=this._naNToZero(parseFloat(this._removeSpaces(this.byId("FS_id").getProperty("value")))),
-				DEV_SUP=this._naNToZero(parseFloat(this._removeSpaces(this.byId("DEV_SUP_id").getProperty("value")))),
-				FUT=this._naNToZero(parseFloat(this._removeSpaces(this.byId("FUT_id").getProperty("value"))));
-			
-			var FUNC_value= FS+DEV_SUP+FUT;
-			
-		
+		 */
+		_updateFUNC: function() {
+
+			var FUNC_field = this.byId("FUNC_id"),
+				FS = this._naNToZero(parseFloat(this._removeSpaces(this.byId("FS_id").getProperty("value")))),
+				DEV_SUP = this._naNToZero(parseFloat(this._removeSpaces(this.byId("DEV_SUP_id").getProperty("value")))),
+				FUT = this._naNToZero(parseFloat(this._removeSpaces(this.byId("FUT_id").getProperty("value"))));
+
+			var FUNC_value = FS + DEV_SUP + FUT;
+
 			FUNC_field.setText(FUNC_value);
 			this._updateGrandTotal();
 			this._validateSaveEnablement();
-			
-		
+
 		},
-		
+
 		/**
 		 * Updates the value of "TECH"
 		 * @private
-		 */	
-		_updateTECH: function(){
-			
-			var TECH_field=this.byId("TECH_id"),
-				FS_SUP=this._naNToZero(parseFloat(this._removeSpaces(this.byId("FS_SUP_id").getProperty("value")))),
-				FS_REV=this._naNToZero(parseFloat(this._removeSpaces(this.byId("FS_REV_id").getProperty("value")))),
-				TS=this._naNToZero(parseFloat(this._removeSpaces(this.byId("TS_id").getProperty("value")))),
-				DEV_UT=this._naNToZero(parseFloat(this._removeSpaces(this.byId("DEV_UT_id").getProperty("value")))),
-				FUT_SUP=this._naNToZero(parseFloat(this._removeSpaces(this.byId("FUT_SUP_id").getProperty("value")))),
-				FIT_SUP=this._naNToZero(parseFloat(this._removeSpaces(this.byId("FIT_SUP_id").getProperty("value"))));
-			
-			var TECH_value=FS_SUP+FS_REV+TS+DEV_UT+FUT_SUP+FIT_SUP;
-			
+		 */
+		_updateTECH: function() {
+
+			var TECH_field = this.byId("TECH_id"),
+				FS_SUP = this._naNToZero(parseFloat(this._removeSpaces(this.byId("FS_SUP_id").getProperty("value")))),
+				FS_REV = this._naNToZero(parseFloat(this._removeSpaces(this.byId("FS_REV_id").getProperty("value")))),
+				TS = this._naNToZero(parseFloat(this._removeSpaces(this.byId("TS_id").getProperty("value")))),
+				DEV_UT = this._naNToZero(parseFloat(this._removeSpaces(this.byId("DEV_UT_id").getProperty("value")))),
+				FUT_SUP = this._naNToZero(parseFloat(this._removeSpaces(this.byId("FUT_SUP_id").getProperty("value")))),
+				FIT_SUP = this._naNToZero(parseFloat(this._removeSpaces(this.byId("FIT_SUP_id").getProperty("value"))));
+
+			var TECH_value = FS_SUP + FS_REV + TS + DEV_UT + FUT_SUP + FIT_SUP;
+
 			TECH_field.setText(TECH_value);
 			this._updateGrandTotal();
 			this._validateSaveEnablement();
-			
+
 		},
 		/**
 		 * Updates the value of "GRAND_TOTAL"
 		 * @private
-		 */	
-		_updateGrandTotal: function(){
-			
-			var TECH=this._naNToZero(parseFloat(this._removeSpaces(this.byId("TECH_id").getProperty("text")))),
-				FUNC=this._naNToZero(parseFloat(this._removeSpaces(this.byId("FUNC_id").getProperty("text")))),
-				TECH_ARCH=this._naNToZero(parseFloat(this._removeSpaces(this.byId("TECH_ARCH_id").getProperty("value")))),
-				TECH_LEAD=this._naNToZero(parseFloat(this._removeSpaces(this.byId("TECH_LEAD_id").getProperty("value"))));
-				
-			var GRAND_TOTAL=TECH+FUNC+TECH_ARCH+TECH_LEAD,
-				GRAND_TOTAL_field=this.byId("GRAND_TOTAL_id");
-				
+		 */
+		_updateGrandTotal: function() {
+
+			var TECH = this._naNToZero(parseFloat(this._removeSpaces(this.byId("TECH_id").getProperty("text")))),
+				FUNC = this._naNToZero(parseFloat(this._removeSpaces(this.byId("FUNC_id").getProperty("text")))),
+				TECH_ARCH = this._naNToZero(parseFloat(this._removeSpaces(this.byId("TECH_ARCH_id").getProperty("value")))),
+				TECH_LEAD = this._naNToZero(parseFloat(this._removeSpaces(this.byId("TECH_LEAD_id").getProperty("value"))));
+
+			var GRAND_TOTAL = TECH + FUNC + TECH_ARCH + TECH_LEAD,
+				GRAND_TOTAL_field = this.byId("GRAND_TOTAL_id");
+
 			GRAND_TOTAL_field.setText(GRAND_TOTAL);
 			this._validateSaveEnablement();
-			
-		
-			
-			
+
 		}
 	});
 

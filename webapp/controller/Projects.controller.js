@@ -39,7 +39,7 @@ sap.ui.define([
 				// taken care of by the smart table itself.
 				iOriginalBusyDelay = oTable.getBusyIndicatorDelay();
 			this._oTableSelector = this.getOwnerComponent().oTableSelector;
-	
+			this.timer=null;
 			this._oResourceBundle = this.getResourceBundle();
 			this._oTable = oTable;
 			// keeps the filter and search state
@@ -49,7 +49,9 @@ sap.ui.define([
 				delay: 0,
 				busy: false,
 				mode: "edit",
-				viewTitle: ""
+				viewTitle: "",
+				timeoutStarted:false,
+				editFieldEvent:null
 			});
 			this.setModel(this._oViewModel, "projectsView");
 
@@ -159,6 +161,9 @@ sap.ui.define([
 			}
 			oModel.submitChanges();
 		},
+		
+			
+	
 
 		/**
 		 * Navigates back in the browser history, if the entry was created by this app.
@@ -448,18 +453,14 @@ sap.ui.define([
 			this.getRouter().getTargets().display("projectDetails");
 		},
 		
-		functionTest: function(func){
-			setTimeout(func(), 0);
+		
+		_editField: function(editedEffortPath){
+					
 
-		},
-		
-	
-		
-		onEditField: function(oEvent){
-			console.log("max");
 			var FS, FS_SUP, FS_REV, TS, DEV_UT, DEV_SUP, FUT, FIT_SUP, FUT_SUP, TECH_ARCH, TECH_LEAD, TECH, FUNC, GRAND_TOTAL,
-				pendingChanges = this.getModel().getPendingChanges()[sap.ui.getCore().byId(oEvent.getParameter("changeEvent").getParameter("id")).getBindingContext().getPath().substr(1)],
-				 originalProperty=this.getModel().getOriginalProperty(sap.ui.getCore().byId(oEvent.getParameter("changeEvent").getParameter("id")).getBindingContext().getPath());
+				pendingChanges = this.getModel().getPendingChanges()[editedEffortPath.substr(1)],
+				 originalProperty=this.getModel().getOriginalProperty(editedEffortPath),
+				 that=this;
 			if(pendingChanges.FS!==undefined){
 				FS=parseFloat(pendingChanges.FS);
 			}else{
@@ -528,21 +529,40 @@ sap.ui.define([
 			FUNC= FS+DEV_SUP+FUT;
 			TECH=FS_SUP+FS_REV+TS+DEV_UT+FUT_SUP+FIT_SUP;
 			GRAND_TOTAL=FUNC+TECH+TECH_ARCH+TECH_LEAD;
-			var that=this;
+		
 			
 			this.functionTest(function(){
 		
-				that.getModel().setProperty(sap.ui.getCore().byId(oEvent.getParameter("changeEvent").getParameter("id")).getBindingContext().getPath()+"/FUNC",FUNC);
-		
-				that.getModel().setProperty(sap.ui.getCore().byId(oEvent.getParameter("changeEvent").getParameter("id")).getBindingContext().getPath()+"/TECH", TECH);
+				that.getModel().setProperty(editedEffortPath + "/FUNC","" + FUNC);
+				that.getModel().setProperty(editedEffortPath + "/TECH", "" + TECH);
+				that.getModel().setProperty(editedEffortPath + "/GRAND_TOTAL", "" + GRAND_TOTAL);
 		
 			});
 			
-	//		this.getModel().setProperty(sap.ui.getCore().byId(oEvent.getParameter("changeEvent").getParameter("id")).getBindingContext().getPath()+"/GRAND_TOTAL",);
 			
 			
 			
+				
 			
+			
+		},
+		
+	
+		
+		onEditField: function(oEvent){
+		//	this._oViewModel.setProperty("/editFieldEvent", oEvent);
+			var that=this,
+				editedEffortPath=sap.ui.getCore().byId(oEvent.getParameter("changeEvent").getParameter("id")).getBindingContext().getPath();
+			if(this._oViewModel.getProperty("/timeoutStarted")===true){
+				clearTimeout(this.timer);
+			}else{
+				this._oViewModel.setProperty("/timeoutStarted", true);
+			}
+			this.timer = setTimeout(function(){
+				alert("maxime?"); 
+				that._oViewModel.setProperty("/timeoutStarted", false); 
+		 		that._editField(editedEffortPath);
+			}, 2000);
 			
 			
 			},

@@ -29,7 +29,7 @@
 				<smartTable:SmartTable id="ProjectsSmartTable" entitySet="EffortMatrix"  smartFilterId="smartFilterBar" tableType="ResponsiveTable"
 					useExportToExcel="true" useVariantManagement="false" useTablePersonalisation="true" header="{i18n>Projects}" showRowCount="false"
 					persistencyKey="SmartTableAnalytical_Explored" editable="false"  fieldChange="onEditField" editTogglable="true" enableAutoBinding="true" app:useSmartField="true"
-					class="sapUiResponsiveContentPadding" requestAtLeastFields="FRICE">
+					class="sapUiResponsiveContentPadding" >
 					<smartTable:customToolbar>
 						<OverflowToolbar design="Transparent">
 							<ToolbarSpacer/>
@@ -45,7 +45,7 @@
 						<columns>
 							<Column id="FRICEID" width="110px" hAlign="Begin">
 								<customData>
-									<core:CustomData key="p13nData" value='\{"columnKey": "FRICE", "columnIndex":"0","filterProperty":"FRICE", "sortProperty":"FRICE"}' />
+									<core:CustomData key="p13nData" value='\{"columnKey": "FRICE", "columnIndex":"0","filterProperty":"FRICE", "sortProperty":"FRICE", "leadingProperty":"FRICE"}' />
 								</customData>
 								<Text text="FRICE"/>
 							</Column>

@@ -37,7 +37,7 @@
 						
 				<Label text="{i18n>ECOMPLEXITYTitle}" required="true"/>
 				<Select
-					forceSelection="false"
+					forceSelection="false" id="COMPLEXITY_id"
 					selectedKey="{COMPLEXITY}">
 					
 					<core:Item key="1-Very Low" text="1-Very Low"/>
