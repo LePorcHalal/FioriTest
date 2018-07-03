@@ -47,10 +47,15 @@
 					<core:Item key="5-Very High" text="5-Very High"/>
 				</Select>
 					
+					<Input 
+					
+					id="CustomInput" valueLiveUpdate="true" liveChange="_updateFUNC" 
+					enabled="false" visible="true" type="Text"/>
 					
 					 
 					<Label text="{i18n>FSTitle}" required="true"/>
 					<Input 
+					
 					 name="FS" id="FS_id" valueLiveUpdate="true" liveChange="_updateFUNC" 
 					enabled="true" visible="true" type="Number"
 					value="{path: 'viewModel>/FS', type: 'sap.ui.model.odata.type.Double',  

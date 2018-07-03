@@ -558,7 +558,6 @@ sap.ui.define([
 				this._oViewModel.setProperty("/timeoutStarted", true);
 			}
 			this.timer = setTimeout(function(){
-				alert("maxime?"); 
 				that._oViewModel.setProperty("/timeoutStarted", false); 
 		 		that._editField(editedEffortPath);
 			}, 2000);
