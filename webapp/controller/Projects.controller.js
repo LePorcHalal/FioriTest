@@ -531,13 +531,12 @@ sap.ui.define([
 			GRAND_TOTAL=FUNC+TECH+TECH_ARCH+TECH_LEAD;
 		
 			
-			this.functionTest(function(){
 		
 				that.getModel().setProperty(editedEffortPath + "/FUNC","" + FUNC);
 				that.getModel().setProperty(editedEffortPath + "/TECH", "" + TECH);
 				that.getModel().setProperty(editedEffortPath + "/GRAND_TOTAL", "" + GRAND_TOTAL);
 		
-			});
+		
 			
 			
 			
