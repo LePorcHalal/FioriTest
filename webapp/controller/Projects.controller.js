@@ -43,7 +43,7 @@ sap.ui.define([
 			this._oResourceBundle = this.getResourceBundle();
 			this._oTable = oTable;
 			// keeps the filter and search state
-
+		
 			this._oViewModel = new JSONModel({
 				enableCreate: false,
 				delay: 0,
@@ -51,7 +51,8 @@ sap.ui.define([
 				mode: "edit",
 				viewTitle: "",
 				timeoutStarted:false,
-				editFieldEvent:null
+				editFieldEvent:null,
+				busyIndicator:false
 			});
 			this.setModel(this._oViewModel, "projectsView");
 
@@ -66,7 +67,10 @@ sap.ui.define([
 			this.getRouter().attachBypassed(this.onBypassed, this);
 			this._oODataModel = this.getOwnerComponent().getModel();
 			this.setInitialSortOrder();
+		
 
+
+			
 		},
 
 		/* =========================================================== */
@@ -96,25 +100,7 @@ sap.ui.define([
 			this._oTable.getBinding("items").refresh();
 		},
 
-		/**
-		 * Event handler for the list selection event
-		 * @param {sap.ui.base.Event} oEvent the list selectionChange event
-		 * @public
-		 */
-		onSelectionChange: function(oEvent) {
-			var that = this;
-			var oItem = oEvent.getParameter("listItem") || oEvent.getSource();
-			var fnLeave = function() {
-				that._oODataModel.resetChanges();
-				that._showDetail(oItem);
-			};
-			if (this._oODataModel.hasPendingChanges()) {
-				this._leaveEditPage(fnLeave);
-			} else {
-				this._showDetail(oItem);
-			}
-			that.getModel("appView").setProperty("/addEnabled", true);
-		},
+
 
 		/**
 		 * Event handler for the bypassed event, which is fired when no routing pattern matched.
@@ -144,7 +130,8 @@ sap.ui.define([
 
 		onSave: function(oEvent) {
 			var that = this,
-				oModel = this.getModel();
+				oModel = this.getModel(),
+				pendingChanges=this.getModel().getPendingChanges();
 
 			this.getModel("projectsView").setProperty("/busy", true);
 			if (this._oViewModel.getProperty("/mode") === "edit") {
@@ -159,11 +146,21 @@ sap.ui.define([
 				});
 
 			}
+			
+			for(var temp in pendingChanges){ 
+				this.getModel().setProperty("/" + temp + "/FUNC", oModel.getProperty("/" + temp + "/FUNC") + "");
+				this.getModel().setProperty("/" + temp + "/TECH", oModel.getProperty("/" + temp + "/TECH") + "");
+				this.getModel().setProperty("/" + temp + "/GRAND_TOTAL", oModel.getProperty("/" + temp + "/GRAND_TOTAL") + "");
+			}
+			
 			oModel.submitChanges();
 		},
 		
-			
-	
+		
+		onCancel: function(){
+			this.getModel().resetChanges();
+			this.onEditField();
+		},
 
 		/**
 		 * Navigates back in the browser history, if the entry was created by this app.
@@ -295,32 +292,14 @@ sap.ui.define([
 			}
 		},
 
-		/**
-		 * Shows the selected item on the detail page
-		 * On phones a additional history entry is created
-		 * @param {sap.m.ObjectListItem} oItem selected Item
-		 * @private
-		 */
-		_showDetail: function(oItem) {
-			//var bReplace = !Device.system.phone;
-			this.getRouter().navTo("projectDetails", {
-				ID: encodeURIComponent(oItem.getBindingContext().getProperty("ID"))
-			});
-		},
 
-		/**
-		 * Internal helper method that adds "/" to the item's path 
-		 * @private
-		 */
-		_fnGetPathWithSlash: function(sPath) {
-			return (sPath.indexOf("/") === 0 ? "" : "/") + sPath;
-		},
+	
 
 		onDelete: function() {
 			var that = this;
 			var sPath, sObjectHeader, sQuestion, sSuccessMessage,
 				oViewModel = this.getModel("appView");
-			this.byId("multiselectTable").getSelectedItems().forEach(function(element) {
+				this.byId("multiselectTable").getSelectedItems().forEach(function(element) {
 
 				sPath = element.getBindingContextPath();
 				sObjectHeader = element.getBindingContext().getProperty("FRICE");
@@ -419,29 +398,7 @@ sap.ui.define([
 			return oPromise;
 		},
 
-		/**
-		 * It navigates to the saved itemToSelect item. After delete it navigate to the next item. 
-		 * After add it navigates to the new added item if it is displayed in the tree. If not it navigates to the first item.
-		 * @private
-		 */
-		_findItem: function() {
-			var itemToSelect = this.getModel("appView").getProperty("/itemToSelect");
-			if (itemToSelect) {
-				var sPath = this._fnGetPathWithSlash(itemToSelect);
-				var oItem = this._oTableSelector.findListItem(sPath);
-				if (!oItem) { //item is not viewable in the tree. not in the current tree page.
-					oItem = this._oTableSelector.findFirstItem();
-					if (oItem) {
-						sPath = oItem.getBindingContext().getPath();
-					} else {
-						this.getRouter().getTargets().display("detailNoObjectsAvailable");
-						return;
-					}
-				}
-				this._oTableSelector.selectAListItem(sPath);
-				this._showDetail(oItem);
-			}
-		},
+	
 
 		/**
 		 * Handles the success of updating an object
@@ -531,18 +488,20 @@ sap.ui.define([
 			GRAND_TOTAL=FUNC+TECH+TECH_ARCH+TECH_LEAD;
 		
 			
-		
-				that.getModel().setProperty(editedEffortPath + "/FUNC","" + FUNC);
-				that.getModel().setProperty(editedEffortPath + "/TECH", "" + TECH);
-				that.getModel().setProperty(editedEffortPath + "/GRAND_TOTAL", "" + GRAND_TOTAL);
-		
+				// //this._oViewModel.setProperty("/busyIndicator", true);
+				// that.getModel().setProperty(editedEffortPath + "/FUNC","" + FUNC);
+				// that.getModel().setProperty(editedEffortPath + "/TECH", "" + TECH);
+				// that.getModel().setProperty(editedEffortPath + "/GRAND_TOTAL", "" + GRAND_TOTAL);
+				// //this._oViewModel.setProperty("/busyIndicator", false);
 		
 			
-			
+			this.getModel().oData[editedEffortPath.substr(1)].GRAND_TOTAL=GRAND_TOTAL;
+			this.getModel().oData[editedEffortPath.substr(1)].FUNC=FUNC;
+			this.getModel().oData[editedEffortPath.substr(1)].TECH=TECH;
 			
 			
 				
-			
+			 
 			
 		},
 		
@@ -550,19 +509,23 @@ sap.ui.define([
 		
 		onEditField: function(oEvent){
 		//	this._oViewModel.setProperty("/editFieldEvent", oEvent);
-			var that=this,
+		/*	var that=this,
 				editedEffortPath=sap.ui.getCore().byId(oEvent.getParameter("changeEvent").getParameter("id")).getBindingContext().getPath();
 			if(this._oViewModel.getProperty("/timeoutStarted")===true){
 				clearTimeout(this.timer);
 			}else{
+				this._oViewModel.setProperty("/busyIndicator", true);
 				this._oViewModel.setProperty("/timeoutStarted", true);
 			}
 			this.timer = setTimeout(function(){
-				that._oViewModel.setProperty("/timeoutStarted", false); 
+				that._oViewModel.setProperty("/timeoutStarted", false);
 		 		that._editField(editedEffortPath);
-			}, 2000);
-			
-			
+		 		that._oViewModel.setProperty("/busyIndicator", false);
+	
+			}, 0);
+			*/
+			var editedEffortPath=sap.ui.getCore().byId(oEvent.getParameter("changeEvent").getParameter("id")).getBindingContext().getPath();
+			this._editField(editedEffortPath);
 			},
 
 		/**

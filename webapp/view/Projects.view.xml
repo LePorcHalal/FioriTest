@@ -4,31 +4,17 @@
 	xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" controllerName="com.beyondtechnologies.controller.Projects"
 	height="100%" class="sapUiSizeCompact">
 	<semantic:SemanticPage id="page">
-		<!--<semantic:titleHeading>
-            <Title text="{i18n>projects}" />
-        </semantic:titleHeading>-->
+	
 		<semantic:content>
 			<PullToRefresh id="pullToRefresh" visible="{device>/support/touch}" refresh="onRefresh"/>
-			<!-- use this to make the table occupy the available screen height -->
+
 			<VBox fitContainer="true">
-				<!--<smartFilterBar:SmartFilterBar id="smartFilterBar" entityType="EffortMatrixType" persistencyKey="SmartFilter_Explored"-->
-				<!--    enableBasicSearch="false" filterBarExpanded="false">-->
-				<!--    <smartFilterBar:controlConfiguration>-->
-				<!--        <smartFilterBar:ControlConfiguration key="FRICE"/>-->
-				<!--<smartFilterBar:ControlConfiguration key="CUSTOMER"/>-->
-				<!--<smartFilterBar:ControlConfiguration key="RESPONSIBLE"/>-->
-				<!--<smartFilterBar:ControlConfiguration key="DESCRIPTION"/>-->
-				<!--    </smartFilterBar:controlConfiguration>-->
-				<!--layout data used to make the table growing but the filter bar fixed -->
-				<!--    <smartFilterBar:layoutData>-->
-				<!--        <FlexItemData shrinkFactor="0"/>-->
-				<!--    </smartFilterBar:layoutData>-->
-				<!--</smartFilterBar:SmartFilterBar>-->
+			
 				
 				
 				<smartTable:SmartTable id="ProjectsSmartTable" entitySet="EffortMatrix"  smartFilterId="smartFilterBar" tableType="ResponsiveTable"
 					useExportToExcel="true" useVariantManagement="false" useTablePersonalisation="true" header="{i18n>Projects}" showRowCount="false"
-					persistencyKey="SmartTableAnalytical_Explored" editable="false"  fieldChange="onEditField" editTogglable="true" enableAutoBinding="true" app:useSmartField="true"
+					persistencyKey="SmartTableAnalytical_Explored" editable="false" fieldChange="onEditField" editTogglable="true" enableAutoBinding="true" app:useSmartField="true"
 					class="sapUiResponsiveContentPadding" >
 					<smartTable:customToolbar>
 						<OverflowToolbar design="Transparent">
@@ -87,13 +73,13 @@
 									<Text text="{COMPLEXITY}"/>
 								</cells>
 								<cells>
-									<Text text="{GRAND_TOTAL}"/>
+									<Text busy="{projectsView>/busyIndicator}" text="{GRAND_TOTAL}"/>
 								</cells>
 								<cells>
-									<Text text="{TECH}"/>
+									<Text busy="{projectsView>/busyIndicator}" text="{TECH}"/>
 								</cells>
 								<cells>
-									<Text text="{FUNC}"/>
+									<Text busy="{projectsView>/busyIndicator}" text="{FUNC}"/>
 								</cells>
 							</ColumnListItem>
 						</items>
@@ -103,7 +89,7 @@
 		</semantic:content>
 			<semantic:customFooterContent>
 				<Button text="SAVE" press="handleConfirmationMessageBoxPress" />
-				<Button text="CANCEL" press="onStoreDialogPress"/>
+				<Button text="CANCEL" press="onCancel"/>
 				</semantic:customFooterContent>
 	</semantic:SemanticPage>
 </mvc:View>
