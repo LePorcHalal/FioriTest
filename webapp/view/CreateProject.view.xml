@@ -38,19 +38,20 @@
 				<Label text="{i18n>ECOMPLEXITYTitle}" required="true"/>
 				<Select
 					forceSelection="false" id="COMPLEXITY_id"
-					selectedKey="{COMPLEXITY}">
+					 change="_customComplexity">
 					
 					<core:Item key="1-Very Low" text="1-Very Low"/>
 					<core:Item key="2-Low" text="2-Low"/>
 					<core:Item key="3-Medium" text="3-Medium"/>
 					<core:Item key="4-High" text="4-High"/>
 					<core:Item key="5-Very High" text="5-Very High"/>
+					<core:Item key="custom" text="Custom value..."/>
 				</Select>
 					
 					<Input 
 					
 					id="CustomInput" valueLiveUpdate="true" liveChange="_updateFUNC" 
-					enabled="false" visible="true" type="Text"/>
+					enabled="false" visible="true" type="Text" placeholder="Custom value..."/>
 					
 					 
 					<Label text="{i18n>FSTitle}" required="true"/>
