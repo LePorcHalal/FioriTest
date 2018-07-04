@@ -90,7 +90,19 @@ sap.ui.define([
 		/**
 		 * Checks if it's a new id and if the combinaison of the Frice and the Complexity doesnt exist already
 		 * @public
-		 */		
+		 */
+		 
+			_customComplexity: function() {
+			if (this.byId("COMPLEXITY_id").getSelectedKey() === "custom") {
+				this.byId("CustomInput").setEnabled(true);
+
+			} else {
+				this.byId("CustomInput").setEnabled(false);
+				this.byId("CustomInput").setValue("");
+
+			}
+
+		},
 		checkIdFriceComplexity: function(oEvent) {
 
 			var that = this;
@@ -204,6 +216,56 @@ sap.ui.define([
 		 * @param {sap.ui.base.Event} oEvent the  display event
 		 * @private
 		 */
+		 		_resetDataFields: function() {
+
+			this.byId("COMPLEXITY_id").setSelectedItem(null);
+			this.byId("CustomInput").setValue(null);
+			this.byId("CustomInput").setEnabled(false);
+			this._oViewModel.setProperty("/FS", "");
+			this._oViewModel.setProperty("/FS_SUP", "");
+			this._oViewModel.setProperty("/FS_REV", "");
+			this._oViewModel.setProperty("/TS", "");
+			this._oViewModel.setProperty("/DEV_UT", "");
+			this._oViewModel.setProperty("/DEV_SUP", "");
+			this._oViewModel.setProperty("/FUT", "");
+			this._oViewModel.setProperty("/FUT_SUP", "");
+			this._oViewModel.setProperty("/FIT_SUP", "");
+			this._oViewModel.setProperty("/TECH_ARCH", "");
+			this._oViewModel.setProperty("/TECH_LEAD", "");
+			this.byId("FS_id")._iSetCount = 1;
+			this.byId("FS_SUP_id")._iSetCount = 1;
+			this.byId("FS_REV_id")._iSetCount = 1;
+			this.byId("TS_id")._iSetCount = 1;
+			this.byId("DEV_UT_id")._iSetCount = 1;
+			this.byId("DEV_SUP_id")._iSetCount = 1;
+			this.byId("FUT_id")._iSetCount = 1;
+			this.byId("FUT_SUP_id")._iSetCount = 1;
+			this.byId("FIT_SUP_id")._iSetCount = 1;
+			this.byId("TECH_ARCH_id")._iSetCount = 1;
+			this.byId("TECH_LEAD_id")._iSetCount = 1;
+			
+		},
+		 	
+		
+		_checkIfBatchRequestSucceeded: function(oEvent) {
+			var oParams = oEvent.getParameters();
+			var aRequests = oEvent.getParameters().requests;
+			var oRequest;
+			if (oParams.success) {
+				if (aRequests) {
+					for (var i = 0; i < aRequests.length; i++) {
+						oRequest = oEvent.getParameters().requests[i];
+						if (!oRequest.success) {
+							return false;
+						}
+					}
+				}
+				return true;
+			} else {
+				return false;
+			}
+		},
+		
 		_onEdit: function(oEvent) {
 			var oData = oEvent.getParameter("data"),
 				oView = this.getView();
@@ -377,6 +439,26 @@ sap.ui.define([
 		 * Updates the value of "FUNC"
 		 * @private
 		 */
+		 _updateChangedEntities: function() {
+			if (this.byId("CustomInput").getEnabled() === true) {
+				this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/COMPLEXITY", "" + this.byId("CustomInput").getValue());
+			} else {
+				this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/COMPLEXITY", "" + this.byId("COMPLEXITY_id").getSelectedItem()
+					.getText());
+			}
+			this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/FS", "" + this._oViewModel.getData().FS);
+			this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/FS_SUP", "" + this._oViewModel.getData().FS_SUP);
+			this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/FS_REV", "" + this._oViewModel.getData().FS_REV);
+			this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/DEV_UT", "" + this._oViewModel.getData().DEV_UT);
+			this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/DEV_SUP", "" + this._oViewModel.getData().DEV_SUP);
+			this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/FUT", "" + this._oViewModel.getData().FUT);
+			this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/TS", "" + this._oViewModel.getData().TS);
+			this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/FUT_SUP", "" + this._oViewModel.getData().FUT_SUP);
+			this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/FIT_SUP", "" + this._oViewModel.getData().FIT_SUP);
+			this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/TECH_ARCH", "" + this._oViewModel.getData().TECH_ARCH);
+			this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/TECH_LEAD", "" + this._oViewModel.getData().TECH_LEAD);
+
+		},
 		_updateFUNC: function() {
 
 			var FUNC_field = this.byId("FUNC_id"),

@@ -13,7 +13,7 @@
       "test.html"
     ],
     "buildRequired": true,
-    "lastBuildDateTime": "Wed, 20 Dec 2017 03:10:57 GMT"
+    "lastBuildDateTime": "Wed, 04 Jul 2018 19:06:30 GMT"
   },
   "generation": [
     {
@@ -49,8 +49,8 @@
     }
   },
   "hcpdeploy": {
-    "account": "p2000362049trial",
-    "name": "wricef2-03",
-    "lastVersionWeTriedToDeploy": "1.0.6"
+    "account": "p1942665794trial",
+    "name": "wricefeditor",
+    "lastVersionWeTriedToDeploy": "1.0.0"
   }
 }
