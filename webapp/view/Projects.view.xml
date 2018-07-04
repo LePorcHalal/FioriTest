@@ -10,12 +10,10 @@
 
 			<VBox fitContainer="true">
 			
-				
-				
 				<smartTable:SmartTable id="ProjectsSmartTable" entitySet="EffortMatrix"  smartFilterId="smartFilterBar" tableType="ResponsiveTable"
 					useExportToExcel="true" useVariantManagement="false" useTablePersonalisation="true" header="{i18n>Projects}" showRowCount="false"
-					persistencyKey="SmartTableAnalytical_Explored" editable="false" fieldChange="onEditField" editTogglable="true" enableAutoBinding="true" app:useSmartField="true"
-					class="sapUiResponsiveContentPadding" >
+					persistencyKey="SmartTableAnalytical_Explored" editable="false" fieldChange="onEditField" editTogglable="true" enableAutoBinding="true" 
+					app:useSmartField="true" class="sapUiResponsiveContentPadding" >
 					<smartTable:customToolbar>
 						<OverflowToolbar design="Transparent">
 							<ToolbarSpacer/>
@@ -88,7 +86,7 @@
 			</VBox>
 		</semantic:content>
 			<semantic:customFooterContent>
-				<Button text="SAVE" press="handleConfirmationMessageBoxPress" />
+				<Button text="SAVE" press="onHandleConfirmationMessageBoxPress" />
 				<Button text="CANCEL" press="onCancel"/>
 				</semantic:customFooterContent>
 	</semantic:SemanticPage>

@@ -5,17 +5,14 @@ sap.ui.define([
 	"sap/ui/model/json/JSONModel",
 	"sap/ui/model/Filter",
 	"sap/ui/model/FilterOperator",
-	"sap/m/GroupHeaderListItem",
 	"sap/ui/Device",
 	"com/beyondtechnologies/model/formatter",
 	"sap/m/MessageBox",
-	"com/beyondtechnologies/model/grouper",
-	"com/beyondtechnologies/model/GroupSortState",
 	"sap/m/MessageToast",
 	"sap/ui/commons/MessageBox"
 
-], function(BaseController, JSONModel, Filter, FilterOperator, GroupHeaderListItem, Device, formatter, MessageBox, grouper,
-	GroupSortState, MessageToast) {
+], function(BaseController, JSONModel, Filter, FilterOperator, Device, formatter, MessageBox,
+	 MessageToast) {
 	"use strict";
 
 	return BaseController.extend("com.beyondtechnologies.controller.Projects", {
@@ -39,20 +36,20 @@ sap.ui.define([
 				// taken care of by the smart table itself.
 				iOriginalBusyDelay = oTable.getBusyIndicatorDelay();
 			this._oTableSelector = this.getOwnerComponent().oTableSelector;
-			this.timer=null;
+			this.timer = null;
 			this._oResourceBundle = this.getResourceBundle();
 			this._oTable = oTable;
 			// keeps the filter and search state
-		
+
 			this._oViewModel = new JSONModel({
 				enableCreate: false,
 				delay: 0,
 				busy: false,
 				mode: "edit",
 				viewTitle: "",
-				timeoutStarted:false,
-				editFieldEvent:null,
-				busyIndicator:false
+				timeoutStarted: false,
+				editFieldEvent: null,
+				busyIndicator: false
 			});
 			this.setModel(this._oViewModel, "projectsView");
 
@@ -66,30 +63,13 @@ sap.ui.define([
 
 			this.getRouter().attachBypassed(this.onBypassed, this);
 			this._oODataModel = this.getOwnerComponent().getModel();
-			this.setInitialSortOrder();
-		
+			this._setInitialSortOrder();
 
-
-			
 		},
 
 		/* =========================================================== */
 		/* event handlers                                              */
 		/* =========================================================== */
-
-		/**
-		 * After list data is available, this handler method updates the
-		 * smart table counter and hides the pull to refresh control, if
-		 * necessary.
-		 * @param {sap.ui.base.Event} oEvent the update finished event
-		 * @public
-		 */
-		onUpdateFinished: function(oEvent) {
-			// hide pull to refresh if necessary
-			this.byId("pullToRefresh").hide();
-			this._findItem();
-			this.getModel("appView").setProperty("/addEnabled", true);
-		},
 
 		/**
 		 * Event handler for refresh event. Keeps filter, sort
@@ -100,8 +80,6 @@ sap.ui.define([
 			this._oTable.getBinding("items").refresh();
 		},
 
-
-
 		/**
 		 * Event handler for the bypassed event, which is fired when no routing pattern matched.
 		 * If there was an object selected in the smart table, that selection is removed.
@@ -111,55 +89,87 @@ sap.ui.define([
 			this._oTable.removeSelections(true);
 		},
 
-		handleConfirmationMessageBoxPress: function(oEvent) {
-			var that = this;
-			var bCompact = !!this.getView().$().closest(".sapUiSizeCompact").length;
-			MessageBox.confirm(
-				"Voulez vous vraiment sauvegarder? Vous ne pouvez pas revenir en arrière", {
-					styleClass: bCompact ? "sapUiSizeCompact" : "",
-					actions: [sap.m.MessageBox.Action.OK, sap.m.MessageBox.Action.CANCEL],
-					onClose: function(sAction) {
-						if (sAction === "OK") {
-							that.onSave(oEvent);
-						}
-					}
-				}
-
-			);
-		},
-
+		/**
+		 * Event handler for the view save button. Saves the changes added by the user. 
+		 * @function
+		 * @public
+		 */
 		onSave: function(oEvent) {
-			var that = this,
-				oModel = this.getModel(),
-				pendingChanges=this.getModel().getPendingChanges();
+			var oModel = this.getModel(),
+				pendingChanges = this.getModel().getPendingChanges();
 
 			this.getModel("projectsView").setProperty("/busy", true);
-			if (this._oViewModel.getProperty("/mode") === "edit") {
-				// attach to the request completed event of the batch
-				oModel.attachEventOnce("batchRequestCompleted", function(oEvent) {
-					if (that._checkIfBatchRequestSucceeded(oEvent)) {
-						that._fnUpdateSuccess();
-					} else {
-						that._fnEntityCreationFailed();
-						MessageBox.error(that._oResourceBundle.getText("updateError"));
-					}
-				});
 
-			}
-			
-			for(var temp in pendingChanges){ 
+			for (var temp in pendingChanges) {
 				this.getModel().setProperty("/" + temp + "/FUNC", oModel.getProperty("/" + temp + "/FUNC") + "");
 				this.getModel().setProperty("/" + temp + "/TECH", oModel.getProperty("/" + temp + "/TECH") + "");
 				this.getModel().setProperty("/" + temp + "/GRAND_TOTAL", oModel.getProperty("/" + temp + "/GRAND_TOTAL") + "");
 			}
-			
+
 			oModel.submitChanges();
 		},
-		
-		
-		onCancel: function(){
+
+		/**
+		 * Event handler (attached declaratively) for the view cancel button. Cancel the changes added by the user. 
+		 * @function
+		 * @public
+		 */
+		onCancel: function() {
 			this.getModel().resetChanges();
 			this.onEditField();
+		},
+
+		/**
+		 * Event handler (attached declaratively) for the view delete button. Deletes items that were selected by the user. 
+		 * @function
+		 * @public
+		 */
+		onDelete: function() {
+			var that = this;
+			var sPath, sObjectHeader, sQuestion, sSuccessMessage,
+				oViewModel = this.getModel("appView");
+			this.byId("multiselectTable").getSelectedItems().forEach(function(element) {
+
+				sPath = element.getBindingContextPath();
+				sObjectHeader = element.getBindingContext().getProperty("FRICE");
+				sQuestion = that._oResourceBundle.getText("deleteText", sObjectHeader);
+				sSuccessMessage = that._oResourceBundle.getText("deleteSuccess", sObjectHeader);
+
+				var fnMyAfterDeleted = function() {
+					oViewModel.setProperty("/busy", false);
+					MessageToast.show(sSuccessMessage);
+				};
+				that._confirmDeletionByUser({
+					question: sQuestion
+				}, [sPath], fnMyAfterDeleted);
+			});
+		},
+
+		/**
+		 * Event handler (attached declaratively) when the user edits fields in the smart table.
+		 * Edits the fields that user can't edit (handles calculation)
+		 * @override
+		 * @public
+		 */
+		onEditField: function(oEvent) {
+			//	this._oViewModel.setProperty("/editFieldEvent", oEvent);
+			/*	var that=this,
+				editedEffortPath=sap.ui.getCore().byId(oEvent.getParameter("changeEvent").getParameter("id")).getBindingContext().getPath();
+			if(this._oViewModel.getProperty("/timeoutStarted")===true){
+				clearTimeout(this.timer);
+			}else{
+				this._oViewModel.setProperty("/busyIndicator", true);
+				this._oViewModel.setProperty("/timeoutStarted", true);
+			}
+			this.timer = setTimeout(function(){
+				that._oViewModel.setProperty("/timeoutStarted", false);
+		 		that._editField(editedEffortPath);
+		 		that._oViewModel.setProperty("/busyIndicator", false);
+	
+			}, 0);
+			*/
+			var editedEffortPath = sap.ui.getCore().byId(oEvent.getParameter("changeEvent").getParameter("id")).getBindingContext().getPath();
+			this._editField(editedEffortPath);
 		},
 
 		/**
@@ -186,30 +196,29 @@ sap.ui.define([
 			}
 		},
 
-		setInitialSortOrder: function() {
-			var oSmartTable = this.getView().byId("ProjectsSmartTable");
-			oSmartTable.applyVariant({
-				
-				group:{
-			
-					groupItems:[{
-						columnKey: "FRICE"
-						
-					}]
-				},
-				sort:{
-					sortItems:[{
-						columnKey:"COMPLEXITY"
-					}]
+		/**
+		 * Event handler (attached declaratively) for the view save button. Asks user to confirm before saving. 
+		 * @function
+		 * @public
+		 */
+		onHandleConfirmationMessageBoxPress: function(oEvent) {
+			var that = this;
+			var bCompact = !!this.getView().$().closest(".sapUiSizeCompact").length;
+			MessageBox.confirm(
+				"Voulez vous vraiment sauvegarder? Vous ne pouvez pas revenir en arrière", {
+					styleClass: bCompact ? "sapUiSizeCompact" : "",
+					actions: [sap.m.MessageBox.Action.OK, sap.m.MessageBox.Action.CANCEL],
+					onClose: function(sAction) {
+						if (sAction === "OK") {
+							that.onSave(oEvent);
+						}
+					}
 				}
-				 
-				
-			});
-
+			);
 		},
 
 		/**
-		 * Event handler  (attached declaratively) called when the add button in the master view is pressed. it opens the create view.
+		 * Event handler (attached declaratively) called when the add button in the master view is pressed. it opens the create view.
 		 * @public
 		 */
 		onAdd: function() {
@@ -228,91 +237,32 @@ sap.ui.define([
 		 */
 		_createViewModel: function() {
 			return new JSONModel({
-				//isFilterBarVisible: false,
-				//filterBarLabel: "",
-				//delay: 0,
 				title: this.getResourceBundle().getText("masterTitleCount", [0]),
-				//noDataText: this.getResourceBundle().getText("masterListNoDataText"),
-				//tableNoDataText: this.getResourceBundle().getText("masterListNoDataText"),
-				//sortBy: "ComplexityID",
-				//groupBy: "NONE",
 				tableBusyDelay: 0,
-				// enableCreate: false,
-				// delay: 0,
-				// busy: false,
-				// mode: "edit",
 				viewTitle: ""
-
-				// shareOnJamTitle: this.getResourceBundle().getText("projectsTitle"),
-				// shareSendEmailSubject: this.getResourceBundle().getText("shareSendEmailProjectsSubject"),
-				// shareSendEmailMessage: this.getResourceBundle().getText("shareSendEmailProjectsMessage", [location.href])
 			});
 		},
 
 		/**
-		 * Ask for user confirmation to leave the edit page and discard all changes
-		 * @param {object} fnLeave - handles discard changes
-		 * @param {object} fnLeaveCancelled - handles cancel
+		 * Groups the table items by Frice, and sorts them by Complexity
 		 * @private
 		 */
-		_leaveEditPage: function(fnLeave, fnLeaveCancelled) {
-			var sQuestion = this.getResourceBundle().getText("warningConfirm");
-			var sTitle = this.getResourceBundle().getText("warning");
+		_setInitialSortOrder: function() {
+			var oSmartTable = this.getView().byId("ProjectsSmartTable");
+			oSmartTable.applyVariant({
+				group: {
 
-			MessageBox.show(sQuestion, {
-				icon: MessageBox.Icon.WARNING,
-				title: sTitle,
-				actions: [MessageBox.Action.OK, MessageBox.Action.CANCEL],
-				onClose: function(oAction) {
-					if (oAction === MessageBox.Action.OK) {
-						fnLeave();
-					} else if (fnLeaveCancelled) {
-						fnLeaveCancelled();
-					}
+					groupItems: [{
+						columnKey: "FRICE"
+
+					}]
+				},
+				sort: {
+					sortItems: [{
+						columnKey: "COMPLEXITY"
+					}]
 				}
-			});
-		},
 
-		_checkIfBatchRequestSucceeded: function(oEvent) {
-			var oParams = oEvent.getParameters();
-			var aRequests = oEvent.getParameters().requests;
-			var oRequest;
-			if (oParams.success) {
-				if (aRequests) {
-					for (var i = 0; i < aRequests.length; i++) {
-						oRequest = oEvent.getParameters().requests[i];
-						if (!oRequest.success) {
-							return false;
-						}
-					}
-				}
-				return true;
-			} else {
-				return false;
-			}
-		},
-
-
-	
-
-		onDelete: function() {
-			var that = this;
-			var sPath, sObjectHeader, sQuestion, sSuccessMessage,
-				oViewModel = this.getModel("appView");
-				this.byId("multiselectTable").getSelectedItems().forEach(function(element) {
-
-				sPath = element.getBindingContextPath();
-				sObjectHeader = element.getBindingContext().getProperty("FRICE");
-				sQuestion = that._oResourceBundle.getText("deleteText", sObjectHeader);
-				sSuccessMessage = that._oResourceBundle.getText("deleteSuccess", sObjectHeader);
-
-				var fnMyAfterDeleted = function() {
-					oViewModel.setProperty("/busy", false);
-					MessageToast.show(sSuccessMessage);
-				};
-				that._confirmDeletionByUser({
-					question: sQuestion
-				}, [sPath], fnMyAfterDeleted);
 			});
 
 		},
@@ -398,8 +348,6 @@ sap.ui.define([
 			return oPromise;
 		},
 
-	
-
 		/**
 		 * Handles the success of updating an object
 		 * @private
@@ -409,124 +357,99 @@ sap.ui.define([
 			this.getView().unbindObject();
 			this.getRouter().getTargets().display("projectDetails");
 		},
-		
-		
-		_editField: function(editedEffortPath){
-					
 
+		/**
+		 * Edits all the fields that have to be calculated, and not entered by the user
+		 * @private
+		 */
+		_editField: function(editedEffortPath) {
 			var FS, FS_SUP, FS_REV, TS, DEV_UT, DEV_SUP, FUT, FIT_SUP, FUT_SUP, TECH_ARCH, TECH_LEAD, TECH, FUNC, GRAND_TOTAL,
 				pendingChanges = this.getModel().getPendingChanges()[editedEffortPath.substr(1)],
-				 originalProperty=this.getModel().getOriginalProperty(editedEffortPath),
-				 that=this;
-			if(pendingChanges.FS!==undefined){
-				FS=parseFloat(pendingChanges.FS);
-			}else{
-				FS=parseFloat(originalProperty.FS);
+				originalProperty = this.getModel().getOriginalProperty(editedEffortPath);
+			if (pendingChanges.FS !== undefined) {
+				FS = parseFloat(pendingChanges.FS);
+			} else {
+				FS = parseFloat(originalProperty.FS);
 			}
-			
-			if(pendingChanges.FS_SUP!==undefined){
-				FS_SUP=parseFloat(pendingChanges.FS_SUP);
-			}else{
-				FS_SUP=parseFloat(originalProperty.FS_SUP);
+
+			if (pendingChanges.FS_SUP !== undefined) {
+				FS_SUP = parseFloat(pendingChanges.FS_SUP);
+			} else {
+				FS_SUP = parseFloat(originalProperty.FS_SUP);
 			}
-			
-			if(pendingChanges.FS_REV!==undefined){
-				FS_REV=parseFloat(pendingChanges.FS_REV);
-			}else{
-				FS_REV=parseFloat(originalProperty.FS_REV);
+
+			if (pendingChanges.FS_REV !== undefined) {
+				FS_REV = parseFloat(pendingChanges.FS_REV);
+			} else {
+				FS_REV = parseFloat(originalProperty.FS_REV);
 			}
-			
-			if(pendingChanges.TS!==undefined){
-				TS=parseFloat(pendingChanges.TS);
-			}else{
-				TS=parseFloat(originalProperty.TS);
+
+			if (pendingChanges.TS !== undefined) {
+				TS = parseFloat(pendingChanges.TS);
+			} else {
+				TS = parseFloat(originalProperty.TS);
 			}
-			
-			if(pendingChanges.DEV_UT!==undefined){
-				DEV_UT=parseFloat(pendingChanges.DEV_UT);
-			}else{
-				DEV_UT=parseFloat(originalProperty.DEV_UT);
+
+			if (pendingChanges.DEV_UT !== undefined) {
+				DEV_UT = parseFloat(pendingChanges.DEV_UT);
+			} else {
+				DEV_UT = parseFloat(originalProperty.DEV_UT);
 			}
-		
-			if(pendingChanges.DEV_SUP!==undefined){
-				DEV_SUP=parseFloat(pendingChanges.DEV_SUP);
-			}else{
-				DEV_SUP=parseFloat(originalProperty.DEV_SUP);
+
+			if (pendingChanges.DEV_SUP !== undefined) {
+				DEV_SUP = parseFloat(pendingChanges.DEV_SUP);
+			} else {
+				DEV_SUP = parseFloat(originalProperty.DEV_SUP);
 			}
-		
-			if(pendingChanges.FUT!==undefined){
-				FUT=parseFloat(pendingChanges.FUT);
-			}else{
-				FUT=parseFloat(originalProperty.FUT);
+
+			if (pendingChanges.FUT !== undefined) {
+				FUT = parseFloat(pendingChanges.FUT);
+			} else {
+				FUT = parseFloat(originalProperty.FUT);
 			}
-			
-			if(pendingChanges.FUT_SUP!==undefined){
-				FUT_SUP=parseFloat(pendingChanges.FUT_SUP);
-			}else{
-				FUT_SUP=parseFloat(originalProperty.FUT_SUP);
+
+			if (pendingChanges.FUT_SUP !== undefined) {
+				FUT_SUP = parseFloat(pendingChanges.FUT_SUP);
+			} else {
+				FUT_SUP = parseFloat(originalProperty.FUT_SUP);
 			}
-			
-			if(pendingChanges.FIT_SUP!==undefined){
-				FIT_SUP=parseFloat(pendingChanges.FIT_SUP);
-			}else{
-				FIT_SUP=parseFloat(originalProperty.FIT_SUP);
+
+			if (pendingChanges.FIT_SUP !== undefined) {
+				FIT_SUP = parseFloat(pendingChanges.FIT_SUP);
+			} else {
+				FIT_SUP = parseFloat(originalProperty.FIT_SUP);
 			}
-			
-			if(pendingChanges.TECH_ARCH!==undefined){
-				TECH_ARCH=parseFloat(pendingChanges.TECH_ARCH);
-			}else{
-				TECH_ARCH=parseFloat(originalProperty.TECH_ARCH);
+
+			if (pendingChanges.TECH_ARCH !== undefined) {
+				TECH_ARCH = parseFloat(pendingChanges.TECH_ARCH);
+			} else {
+				TECH_ARCH = parseFloat(originalProperty.TECH_ARCH);
 			}
-			
-			if(pendingChanges.TECH_LEAD!==undefined){
-				TECH_LEAD=parseFloat(pendingChanges.TECH_LEAD);
-			}else{
-				TECH_LEAD=parseFloat(originalProperty.TECH_LEAD);
+
+			if (pendingChanges.TECH_LEAD !== undefined) {
+				TECH_LEAD = parseFloat(pendingChanges.TECH_LEAD);
+			} else {
+				TECH_LEAD = parseFloat(originalProperty.TECH_LEAD);
 			}
-			FUNC= FS+DEV_SUP+FUT;
-			TECH=FS_SUP+FS_REV+TS+DEV_UT+FUT_SUP+FIT_SUP;
-			GRAND_TOTAL=FUNC+TECH+TECH_ARCH+TECH_LEAD;
-		
-			
-				// //this._oViewModel.setProperty("/busyIndicator", true);
-				// that.getModel().setProperty(editedEffortPath + "/FUNC","" + FUNC);
-				// that.getModel().setProperty(editedEffortPath + "/TECH", "" + TECH);
-				// that.getModel().setProperty(editedEffortPath + "/GRAND_TOTAL", "" + GRAND_TOTAL);
-				// //this._oViewModel.setProperty("/busyIndicator", false);
-		
-			
-			this.getModel().oData[editedEffortPath.substr(1)].GRAND_TOTAL=GRAND_TOTAL;
-			this.getModel().oData[editedEffortPath.substr(1)].FUNC=FUNC;
-			this.getModel().oData[editedEffortPath.substr(1)].TECH=TECH;
-			
-			
-				
-			 
-			
+			FUNC = FS + DEV_SUP + FUT;
+			TECH = FS_SUP + FS_REV + TS + DEV_UT + FUT_SUP + FIT_SUP;
+			GRAND_TOTAL = FUNC + TECH + TECH_ARCH + TECH_LEAD;
+
+			// //this._oViewModel.setProperty("/busyIndicator", true);
+			// that.getModel().setProperty(editedEffortPath + "/FUNC","" + FUNC);
+			// that.getModel().setProperty(editedEffortPath + "/TECH", "" + TECH);
+			// that.getModel().setProperty(editedEffortPath + "/GRAND_TOTAL", "" + GRAND_TOTAL);
+			// //this._oViewModel.setProperty("/busyIndicator", false);
+
+			//this code doesn't respect fiori architectural guidelines
+			//However, if we use the setProperty method, it slows up the program 
+			//(have to wait ~2 sec everytime the users edits a field)
+			//If fiori architectural guideline have to be respected, uncomment the code above
+			this.getModel().oData[editedEffortPath.substr(1)].GRAND_TOTAL = GRAND_TOTAL;
+			this.getModel().oData[editedEffortPath.substr(1)].FUNC = FUNC;
+			this.getModel().oData[editedEffortPath.substr(1)].TECH = TECH;
+
 		},
-		
-	
-		
-		onEditField: function(oEvent){
-		//	this._oViewModel.setProperty("/editFieldEvent", oEvent);
-		/*	var that=this,
-				editedEffortPath=sap.ui.getCore().byId(oEvent.getParameter("changeEvent").getParameter("id")).getBindingContext().getPath();
-			if(this._oViewModel.getProperty("/timeoutStarted")===true){
-				clearTimeout(this.timer);
-			}else{
-				this._oViewModel.setProperty("/busyIndicator", true);
-				this._oViewModel.setProperty("/timeoutStarted", true);
-			}
-			this.timer = setTimeout(function(){
-				that._oViewModel.setProperty("/timeoutStarted", false);
-		 		that._editField(editedEffortPath);
-		 		that._oViewModel.setProperty("/busyIndicator", false);
-	
-			}, 0);
-			*/
-			var editedEffortPath=sap.ui.getCore().byId(oEvent.getParameter("changeEvent").getParameter("id")).getBindingContext().getPath();
-			this._editField(editedEffortPath);
-			},
 
 		/**
 		 * Handles the success of creating an object
@@ -537,56 +460,6 @@ sap.ui.define([
 			var sObjectPath = this.getModel().createKey("Projects", oData);
 			this.getModel("appView").setProperty("/itemToSelect", "/" + sObjectPath); //save last created
 			this.getModel("appView").setProperty("/busy", false);
-
-			this.getRouter().navTo("projectDetails", {
-				ID: encodeURIComponent(oData.ID)
-			});
-
-		},
-
-		/**
-		 * Handles the failure of creating/updating an object
-		 * @private
-		 */
-		_fnEntityCreationFailed: function() {
-			this.getModel("appView").setProperty("/busy", false);
-		},
-
-		/**
-		 * Handles the onDisplay event which is triggered when this view is displayed 
-		 * @param {sap.ui.base.Event} oEvent the on display event
-		 * @private
-		 */
-		_onDisplay: function(oEvent) {
-			var oData = oEvent.getParameter("data");
-			if (oData && oData.mode === "update") {
-				this._onEdit(oEvent);
-			} else {
-				this._onCreate(oEvent);
-			}
-		},
-
-		/**
-		 * Gets the form fields
-		 * @param {sap.ui.layout.form} oSimpleForm the form in the view.
-		 * @private
-		 */
-		_getFormFields: function(oSimpleForm) {
-			var aControls = [];
-			var aFormContent = oSimpleForm.getContent();
-			var sControlType;
-			for (var i = 0; i < aFormContent.length; i++) {
-				sControlType = aFormContent[i].getMetadata().getName();
-				if (sControlType === "sap.m.Input" || sControlType === "sap.m.DateTimeInput" ||
-					sControlType === "sap.m.CheckBox") {
-					aControls.push({
-						control: aFormContent[i],
-						required: aFormContent[i - 1].getRequired && aFormContent[i - 1].getRequired()
-					});
-				}
-			}
-			return aControls;
 		}
-
 	});
 });
