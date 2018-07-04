@@ -356,7 +356,7 @@ sap.ui.define([
 
 		/**
 		 * Changes un undefined value (NaN) to "0"
-		 *@param {integer} 
+		 *@param {integer} the value {string} the id of the input
 		 * @private
 		 */
 		_naNToZero: function(value, id) {
