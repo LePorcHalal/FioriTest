@@ -86,90 +86,58 @@ sap.ui.define([
 			this.getRouter().getTargets().display("projects");
 			this._resetDataFields();
 		},
+		
+		/**
+		 * Checks if it's a new id and if the combinaison of the Frice and the Complexity doesnt exist already
+		 * @public
+		 */		
+		checkIdFriceComplexity: function(oEvent) {
 
-		_customComplexity: function() {
-			if (this.byId("COMPLEXITY_id").getSelectedKey() === "custom") {
-				this.byId("CustomInput").setEnabled(true);
+			var that = this;
+			var exitFunction = false;
+			var inputId = this.byId("ID_id").mProperties.value;
+			var idString = "/EffortMatrix('" + inputId + "')";
 
-			} else {
-				this.byId("CustomInput").setEnabled(false);
-				this.byId("CustomInput").setValue("");
-
-			}
-
-		},
-
-	
-		_resetDataFields: function() {
-
-			this.byId("COMPLEXITY_id").setSelectedItem(null);
-			this.byId("CustomInput").setValue(null);
-			this.byId("CustomInput").setEnabled(false);
-			this._oViewModel.setProperty("/FS", "");
-			this._oViewModel.setProperty("/FS_SUP", "");
-			this._oViewModel.setProperty("/FS_REV", "");
-			this._oViewModel.setProperty("/TS", "");
-			this._oViewModel.setProperty("/DEV_UT", "");
-			this._oViewModel.setProperty("/DEV_SUP", "");
-			this._oViewModel.setProperty("/FUT", "");
-			this._oViewModel.setProperty("/FUT_SUP", "");
-			this._oViewModel.setProperty("/FIT_SUP", "");
-			this._oViewModel.setProperty("/TECH_ARCH", "");
-			this._oViewModel.setProperty("/TECH_LEAD", "");
-			this.byId("FS_id")._iSetCount = 1;
-			this.byId("FS_SUP_id")._iSetCount = 1;
-			this.byId("FS_REV_id")._iSetCount = 1;
-			this.byId("TS_id")._iSetCount = 1;
-			this.byId("DEV_UT_id")._iSetCount = 1;
-			this.byId("DEV_SUP_id")._iSetCount = 1;
-			this.byId("FUT_id")._iSetCount = 1;
-			this.byId("FUT_SUP_id")._iSetCount = 1;
-			this.byId("FIT_SUP_id")._iSetCount = 1;
-			this.byId("TECH_ARCH_id")._iSetCount = 1;
-			this.byId("TECH_LEAD_id")._iSetCount = 1;
-			
-		},
-
-		_updateChangedEntities: function() {
-			if (this.byId("CustomInput").getEnabled() === true) {
-				this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/COMPLEXITY", "" + this.byId("CustomInput").getValue());
-			} else {
-				this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/COMPLEXITY", "" + this.byId("COMPLEXITY_id").getSelectedItem()
-					.getText());
-			}
-			this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/FS", "" + this._oViewModel.getData().FS);
-			this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/FS_SUP", "" + this._oViewModel.getData().FS_SUP);
-			this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/FS_REV", "" + this._oViewModel.getData().FS_REV);
-			this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/DEV_UT", "" + this._oViewModel.getData().DEV_UT);
-			this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/DEV_SUP", "" + this._oViewModel.getData().DEV_SUP);
-			this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/FUT", "" + this._oViewModel.getData().FUT);
-			this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/TS", "" + this._oViewModel.getData().TS);
-			this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/FUT_SUP", "" + this._oViewModel.getData().FUT_SUP);
-			this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/FIT_SUP", "" + this._oViewModel.getData().FIT_SUP);
-			this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/TECH_ARCH", "" + this._oViewModel.getData().TECH_ARCH);
-			this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/TECH_LEAD", "" + this._oViewModel.getData().TECH_LEAD);
-
-		},
-
-		_checkIfBatchRequestSucceeded: function(oEvent) {
-			var oParams = oEvent.getParameters();
-			var aRequests = oEvent.getParameters().requests;
-			var oRequest;
-			if (oParams.success) {
-				if (aRequests) {
-					for (var i = 0; i < aRequests.length; i++) {
-						oRequest = oEvent.getParameters().requests[i];
-						if (!oRequest.success) {
-							return false;
-						}
-					}
+			for (var temp in this.getModel().oData) {
+				
+				var complexityTemp;
+				if (this.byId("CustomInput").getEnabled() === true) {
+					
+					complexityTemp =  "" + this.byId("CustomInput").getValue();
+				} else {
+					
+					complexityTemp = "" + this.byId("COMPLEXITY_id").getSelectedItem().getText();
 				}
-				return true;
-			} else {
-				return false;
-			}
-		},
+			
+				if (this.getModel().getProperty("/" + temp + "/FRICE") === this.byId("FRICE_id").getProperty("value") &&
+					this.getModel().getProperty("/" + temp + "/COMPLEXITY") === complexityTemp &&
+					this.getModel().getPendingChanges()[temp] === undefined) {
 
+					MessageBox.error(
+						"Cette combinaison de COMPLEXITY et FRICE a déjà été utilisée."
+					);
+					exitFunction = true;
+					break;
+				}
+			}
+			if (exitFunction === true) {
+				return;
+			}
+
+			this.getModel().read(idString, {
+				success: function() {
+					MessageBox.error(
+						"Ce ID a déjà été utilisé."
+					);
+					that.byId("ID_id").mProperties.value = "";
+				},
+				error: function() {
+					that.onSave(oEvent);
+				}
+
+			});
+
+		},
 		/**
 		 * Event handler (attached declaratively) for the view cancel button. Asks the user confirmation to discard the changes. 
 		 * @function
@@ -208,6 +176,8 @@ sap.ui.define([
 				this._resetDataFields();
 			}
 		},
+		
+		
 		/**
 		 * Opens a dialog letting the user either confirm or cancel the quit and discard of changes.
 		 * @private
@@ -309,53 +279,6 @@ sap.ui.define([
 			}
 		},
 
-		checkIfID: function(oEvent) {
-
-			var that = this;
-			var exitFunction = false;
-			var inputId = this.byId("ID_id").mProperties.value;
-			var idString = "/EffortMatrix('" + inputId + "')";
-
-			for (var temp in this.getModel().oData) {
-				
-				var complexityTemp;
-				if (this.byId("CustomInput").getEnabled() === true) {
-					
-					complexityTemp =  "" + this.byId("CustomInput").getValue();
-				} else {
-					
-					complexityTemp = "" + this.byId("COMPLEXITY_id").getSelectedItem().getText();
-				}
-			
-				if (this.getModel().getProperty("/" + temp + "/FRICE") === this.byId("FRICE_id").getProperty("value") &&
-					this.getModel().getProperty("/" + temp + "/COMPLEXITY") === complexityTemp &&
-					this.getModel().getPendingChanges()[temp] === undefined) {
-
-					MessageBox.error(
-						"Cette combinaison de COMPLEXITY et FRICE a déjà été utilisée."
-					);
-					exitFunction = true;
-					break;
-				}
-			}
-			if (exitFunction === true) {
-				return;
-			}
-
-			this.getModel().read(idString, {
-				success: function() {
-					MessageBox.error(
-						"Ce ID a déjà été utilisé."
-					);
-					that.byId("ID_id").mProperties.value = "";
-				},
-				error: function() {
-					that.onSave(oEvent);
-				}
-
-			});
-
-		},
 		/**
 		 * Handles the success of updating an object
 		 * @private
@@ -430,16 +353,6 @@ sap.ui.define([
 			return aControls;
 		},
 
-		/**
-		 * Remove the spaces from the string that came from the input of "CreateProject"
-		 *@param {string} the input value of "CreateProject"
-		 * @private
-		 */
-		_removeSpaces: function(value) {
-
-			return value.replace(/\s/g, '');
-
-		},
 
 		/**
 		 * Changes un undefined value (NaN) to "0"
@@ -467,9 +380,9 @@ sap.ui.define([
 		_updateFUNC: function() {
 
 			var FUNC_field = this.byId("FUNC_id"),
-				FS = this._naNToZero(parseFloat(this._removeSpaces(this.byId("FS_id").getProperty("value"))), "FS_id"),
-				DEV_SUP = this._naNToZero(parseFloat(this._removeSpaces(this.byId("DEV_SUP_id").getProperty("value"))), "DEV_SUP_id"),
-				FUT = this._naNToZero(parseFloat(this._removeSpaces(this.byId("FUT_id").getProperty("value"))), "FUT_id");
+				FS = this._naNToZero(parseFloat(this.byId("FS_id").getProperty("value")), "FS_id"),
+				DEV_SUP = this._naNToZero(parseFloat(this.byId("DEV_SUP_id").getProperty("value")), "DEV_SUP_id"),
+				FUT = this._naNToZero(parseFloat(this.byId("FUT_id").getProperty("value")), "FUT_id");
 
 			var FUNC_value = FS + DEV_SUP + FUT;
 
@@ -486,12 +399,12 @@ sap.ui.define([
 		_updateTECH: function() {
 
 			var TECH_field = this.byId("TECH_id"),
-				FS_SUP = this._naNToZero(parseFloat(this._removeSpaces(this.byId("FS_SUP_id").getProperty("value"))), "FS_SUP_id"),
-				FS_REV = this._naNToZero(parseFloat(this._removeSpaces(this.byId("FS_REV_id").getProperty("value"))), "FS_REV_id"),
-				TS = this._naNToZero(parseFloat(this._removeSpaces(this.byId("TS_id").getProperty("value"))), "TS_id"),
-				DEV_UT = this._naNToZero(parseFloat(this._removeSpaces(this.byId("DEV_UT_id").getProperty("value"))), "DEV_UT_id"),
-				FUT_SUP = this._naNToZero(parseFloat(this._removeSpaces(this.byId("FUT_SUP_id").getProperty("value"))), "FUT_SUP_id"),
-				FIT_SUP = this._naNToZero(parseFloat(this._removeSpaces(this.byId("FIT_SUP_id").getProperty("value"))), "FIT_SUP_id");
+				FS_SUP = this._naNToZero(parseFloat(this.byId("FS_SUP_id").getProperty("value")), "FS_SUP_id"),
+				FS_REV = this._naNToZero(parseFloat(this.byId("FS_REV_id").getProperty("value")), "FS_REV_id"),
+				TS = this._naNToZero(parseFloat(this.byId("TS_id").getProperty("value")), "TS_id"),
+				DEV_UT = this._naNToZero(parseFloat(this.byId("DEV_UT_id").getProperty("value")), "DEV_UT_id"),
+				FUT_SUP = this._naNToZero(parseFloat(this.byId("FUT_SUP_id").getProperty("value")), "FUT_SUP_id"),
+				FIT_SUP = this._naNToZero(parseFloat(this.byId("FIT_SUP_id").getProperty("value")), "FIT_SUP_id");
 
 			var TECH_value = FS_SUP + FS_REV + TS + DEV_UT + FUT_SUP + FIT_SUP;
 
@@ -506,10 +419,10 @@ sap.ui.define([
 		 */
 		_updateGrandTotal: function() {
 
-			var TECH = this._naNToZero(parseFloat(this._removeSpaces(this.byId("TECH_id").getProperty("text"))), "TECH_id"),
-				FUNC = this._naNToZero(parseFloat(this._removeSpaces(this.byId("FUNC_id").getProperty("text"))), "FUNC_id"),
-				TECH_ARCH = this._naNToZero(parseFloat(this._removeSpaces(this.byId("TECH_ARCH_id").getProperty("value"))), "TECH_ARCH_id"),
-				TECH_LEAD = this._naNToZero(parseFloat(this._removeSpaces(this.byId("TECH_LEAD_id").getProperty("value"))), "TECH_LEAD_id");
+			var TECH = this._naNToZero(parseFloat(this.byId("TECH_id").getProperty("text")), "TECH_id"),
+				FUNC = this._naNToZero(parseFloat(this.byId("FUNC_id").getProperty("text")), "FUNC_id"),
+				TECH_ARCH = this._naNToZero(parseFloat(this.byId("TECH_ARCH_id").getProperty("value")), "TECH_ARCH_id"),
+				TECH_LEAD = this._naNToZero(parseFloat(this.byId("TECH_LEAD_id").getProperty("value")), "TECH_LEAD_id");
 
 			var GRAND_TOTAL = TECH + FUNC + TECH_ARCH + TECH_LEAD,
 				GRAND_TOTAL_field = this.byId("GRAND_TOTAL_id");

@@ -195,7 +195,7 @@
 		</semantic:content>
 	
 		<semantic:footerCustomActions>
-			<Button text="Save"  id="save" enabled="{viewModel>/enableCreate}" press="checkIfID"/>
+			<Button text="Save"  id="save" enabled="{viewModel>/enableCreate}" press="checkIdFriceComplexity"/>
 			<Button text="Cancel" id="cancel" press="onCancel"/>
 		</semantic:footerCustomActions>
 	</semantic:SemanticPage>
