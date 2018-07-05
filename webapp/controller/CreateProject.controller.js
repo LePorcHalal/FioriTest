@@ -9,7 +9,7 @@ sap.ui.define([
 	return BaseController.extend("com.beyondtechnologies.controller.CreateProject", {
 
 		_oBinding: {},
-//MAX
+		//MAX
 		/* =========================================================== */
 		/* lifecycle methods                                           */
 		/* =========================================================== */
@@ -86,13 +86,13 @@ sap.ui.define([
 			this.getRouter().getTargets().display("projects");
 			this._resetDataFields();
 		},
-		
+
 		/**
 		 * Checks if it's a new id and if the combinaison of the Frice and the Complexity doesnt exist already
 		 * @public
 		 */
-		 
-			_customComplexity: function() {
+
+		_customComplexity: function() {
 			if (this.byId("COMPLEXITY_id").getSelectedKey() === "custom") {
 				this.byId("CustomInput").setEnabled(true);
 
@@ -105,22 +105,23 @@ sap.ui.define([
 		},
 		checkIdFriceComplexity: function(oEvent) {
 
-			var that = this;
-			var exitFunction = false;
-			var inputId = this.byId("ID_id").mProperties.value;
-			var idString = "/EffortMatrix('" + inputId + "')";
+			var that = this,
+				exitFunction = false,
+				inputId = this.byId("ID_id").getProperty("value"),
+
+				idString = "/EffortMatrix('" + inputId + "')";
 
 			for (var temp in this.getModel().oData) {
-				
+
 				var complexityTemp;
 				if (this.byId("CustomInput").getEnabled() === true) {
-					
-					complexityTemp =  "" + this.byId("CustomInput").getValue();
+
+					complexityTemp = "" + this.byId("CustomInput").getValue();
 				} else {
-					
+
 					complexityTemp = "" + this.byId("COMPLEXITY_id").getSelectedItem().getText();
 				}
-			
+
 				if (this.getModel().getProperty("/" + temp + "/FRICE") === this.byId("FRICE_id").getProperty("value") &&
 					this.getModel().getProperty("/" + temp + "/COMPLEXITY") === complexityTemp &&
 					this.getModel().getPendingChanges()[temp] === undefined) {
@@ -141,7 +142,7 @@ sap.ui.define([
 					MessageBox.error(
 						"Ce ID a déjà été utilisé."
 					);
-					that.byId("ID_id").mProperties.value = "";
+					that.byId("ID_id").setProperty("value", "");
 				},
 				error: function() {
 					that.onSave(oEvent);
@@ -188,8 +189,7 @@ sap.ui.define([
 				this._resetDataFields();
 			}
 		},
-		
-		
+
 		/**
 		 * Opens a dialog letting the user either confirm or cancel the quit and discard of changes.
 		 * @private
@@ -216,7 +216,7 @@ sap.ui.define([
 		 * @param {sap.ui.base.Event} oEvent the  display event
 		 * @private
 		 */
-		 		_resetDataFields: function() {
+		_resetDataFields: function() {
 
 			this.byId("COMPLEXITY_id").setSelectedItem(null);
 			this.byId("CustomInput").setValue(null);
@@ -243,10 +243,9 @@ sap.ui.define([
 			this.byId("FIT_SUP_id")._iSetCount = 1;
 			this.byId("TECH_ARCH_id")._iSetCount = 1;
 			this.byId("TECH_LEAD_id")._iSetCount = 1;
-			
+
 		},
-		 	
-		
+
 		_checkIfBatchRequestSucceeded: function(oEvent) {
 			var oParams = oEvent.getParameters();
 			var aRequests = oEvent.getParameters().requests;
@@ -265,7 +264,7 @@ sap.ui.define([
 				return false;
 			}
 		},
-		
+
 		_onEdit: function(oEvent) {
 			var oData = oEvent.getParameter("data"),
 				oView = this.getView();
@@ -415,31 +414,30 @@ sap.ui.define([
 			return aControls;
 		},
 
-
 		/**
 		 * Changes un undefined value (NaN) to "0"
 		 *@param {integer} the value {string} the id of the input
 		 * @private
 		 */
 		_naNToZero: function(value, id) {
-			
-				if (isNaN(value)) {
-					if  ((this.byId(id)._iSetCount !== 1) && (id !== "TECH_id" ) && (id !== "FUNC_id")) {
-						this.byId(id).setValueState("Error");
-					}
-					return 0;
-				} else {
-					if ((this.byId(id)._iSetCount !== 1) && (id !== "TECH_id" ) && (id !== "FUNC_id")) {
-						this.byId(id).setValueState("None");
-					}
-					return value;
+
+			if (isNaN(value)) {
+				if ((this.byId(id)._iSetCount !== 1) && (id !== "TECH_id") && (id !== "FUNC_id")) {
+					this.byId(id).setValueState("Error");
 				}
+				return 0;
+			} else {
+				if ((this.byId(id)._iSetCount !== 1) && (id !== "TECH_id") && (id !== "FUNC_id")) {
+					this.byId(id).setValueState("None");
+				}
+				return value;
+			}
 		},
 		/**
 		 * Updates the value of "FUNC"
 		 * @private
 		 */
-		 _updateChangedEntities: function() {
+		_updateChangedEntities: function() {
 			if (this.byId("CustomInput").getEnabled() === true) {
 				this.getModel().setProperty(this.getView().getBindingContext().getPath() + "/COMPLEXITY", "" + this.byId("CustomInput").getValue());
 			} else {
