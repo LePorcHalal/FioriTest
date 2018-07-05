@@ -12,7 +12,7 @@ sap.ui.define([
 	"sap/ui/commons/MessageBox"
 
 ], function(BaseController, JSONModel, Filter, FilterOperator, Device, formatter, MessageBox,
-	 MessageToast) {
+	MessageToast) {
 	"use strict";
 
 	return BaseController.extend("com.beyondtechnologies.controller.Projects", {
@@ -39,6 +39,7 @@ sap.ui.define([
 			this.timer = null;
 			this._oResourceBundle = this.getResourceBundle();
 			this._oTable = oTable;
+			this._oModifedEfforts = [];
 			// keeps the filter and search state
 
 			this._oViewModel = new JSONModel({
@@ -50,6 +51,7 @@ sap.ui.define([
 				timeoutStarted: false,
 				editFieldEvent: null,
 				busyIndicator: false
+
 			});
 			this.setModel(this._oViewModel, "projectsView");
 
@@ -107,6 +109,8 @@ sap.ui.define([
 			}
 
 			oModel.submitChanges();
+			this.byId("ProjectsSmartTable").setEditable(false);
+		//	this._oModifedEfforts = [];
 		},
 
 		/**
@@ -115,8 +119,14 @@ sap.ui.define([
 		 * @public
 		 */
 		onCancel: function() {
+			var that = this;
+			this.byId("ProjectsSmartTable").setEditable(false);
 			this.getModel().resetChanges();
-			this.onEditField();
+			this._oModifedEfforts.forEach(function(sPath) {
+				that._editField(sPath, true);
+			});
+			this._oModifedEfforts = [];
+			this.getModel().refresh();
 		},
 
 		/**
@@ -126,22 +136,17 @@ sap.ui.define([
 		 */
 		onDelete: function() {
 			var that = this;
-			var sPath, sObjectHeader, sQuestion, sSuccessMessage,
+			var sPath, sObjectHeader, sQuestion,
 				oViewModel = this.getModel("appView");
 			this.byId("multiselectTable").getSelectedItems().forEach(function(element) {
 
 				sPath = element.getBindingContextPath();
 				sObjectHeader = element.getBindingContext().getProperty("FRICE");
 				sQuestion = that._oResourceBundle.getText("deleteText", sObjectHeader);
-				sSuccessMessage = that._oResourceBundle.getText("deleteSuccess", sObjectHeader);
 
-				var fnMyAfterDeleted = function() {
-					oViewModel.setProperty("/busy", false);
-					MessageToast.show(sSuccessMessage);
-				};
 				that._confirmDeletionByUser({
 					question: sQuestion
-				}, [sPath], fnMyAfterDeleted);
+				}, [sPath]);
 			});
 		},
 
@@ -168,8 +173,10 @@ sap.ui.define([
 	
 			}, 0);
 			*/
+
 			var editedEffortPath = sap.ui.getCore().byId(oEvent.getParameter("changeEvent").getParameter("id")).getBindingContext().getPath();
-			this._editField(editedEffortPath);
+			this._oModifedEfforts.push(editedEffortPath);
+			this._editField(editedEffortPath, false);
 		},
 
 		/**
@@ -273,19 +280,18 @@ sap.ui.define([
 		 * title (optional) may be a string defining the title of the popup.
 		 * @param {object} oConfirmation - Possesses up to two attributes: question (obligatory) is a string providing the statement presented to the user.
 		 * @param {array} aPaths -  Array of strings representing the context paths to the entities to be deleted. Currently only one is supported.
-		 * @param {callback} fnAfterDeleted (optional) - called after deletion is done. 
 		 * @param {callback} fnDeleteCanceled (optional) - called when the user decides not to perform the deletion
 		 * @param {callback} fnDeleteConfirmed (optional) - called when the user decides to perform the deletion. A Promise will be passed
 		 * @function
 		 * @private
 		 */
 		/* eslint-disable */ // using more then 4 parameters for a function is justified here
-		_confirmDeletionByUser: function(oConfirmation, aPaths, fnAfterDeleted, fnDeleteCanceled, fnDeleteConfirmed) {
+		_confirmDeletionByUser: function(oConfirmation, aPaths, fnDeleteCanceled, fnDeleteConfirmed) {
 			/* eslint-enable */
 			// Callback function for when the user decides to perform the deletion
 			var fnDelete = function() {
 				// Calls the oData Delete service
-				this._callDelete(aPaths, fnAfterDeleted);
+				this._callDelete(aPaths);
 			}.bind(this);
 
 			// Opens the confirmation dialog
@@ -306,25 +312,23 @@ sap.ui.define([
 		/**
 		 * Performs the deletion of a list of entities.
 		 * @param {array} aPaths -  Array of strings representing the context paths to the entities to be deleted. Currently only one is supported.
-		 * @param {callback} fnAfterDeleted (optional) - called after deletion is done. 
 		 * @return a Promise that will be resolved as soon as the deletion process ended successfully.
 		 * @function
 		 * @private
 		 */
-		_callDelete: function(aPaths, fnAfterDeleted) {
+		_callDelete: function(aPaths) {
 			var oViewModel = this.getModel("projectsView");
 			oViewModel.setProperty("/busy", true);
 			var fnFailed = function() {
 				this._oODataModel.setUseBatch(true);
 			}.bind(this);
 			var fnSuccess = function() {
-				if (fnAfterDeleted) {
-					fnAfterDeleted();
-					this._oODataModel.setUseBatch(true);
-				}
 				oViewModel.setProperty("/busy", false);
 			}.bind(this);
 			return this._deleteOneEntity(aPaths[0], fnSuccess, fnFailed);
+			this._oModifiedEfforts= this._oModifedEfforts.filter(function(element){
+				return element!== aPaths[0];	
+			});
 		},
 
 		/**
@@ -357,22 +361,26 @@ sap.ui.define([
 			this.getView().unbindObject();
 			this.getRouter().getTargets().display("projectDetails");
 		},
-
+		
 		/**
 		 * Edits all the fields that have to be calculated, and not entered by the user
 		 * @private
 		 */
-		_editField: function(editedEffortPath) {
+		_editField: function(editedEffortPath, forceOriginalProperty) {
 			var FS, FS_SUP, FS_REV, TS, DEV_UT, DEV_SUP, FUT, FIT_SUP, FUT_SUP, TECH_ARCH, TECH_LEAD, TECH, FUNC, GRAND_TOTAL,
 				pendingChanges = this.getModel().getPendingChanges()[editedEffortPath.substr(1)],
 				originalProperty = this.getModel().getOriginalProperty(editedEffortPath);
+			
+			if(forceOriginalProperty){
+				pendingChanges=originalProperty;
+			}
 			if (pendingChanges.FS !== undefined) {
 				FS = parseFloat(pendingChanges.FS);
 			} else {
 				FS = parseFloat(originalProperty.FS);
 			}
 
-			if (pendingChanges.FS_SUP !== undefined) {
+			if (pendingChanges.FS_SUP !== undefined ) {
 				FS_SUP = parseFloat(pendingChanges.FS_SUP);
 			} else {
 				FS_SUP = parseFloat(originalProperty.FS_SUP);
@@ -384,7 +392,7 @@ sap.ui.define([
 				FS_REV = parseFloat(originalProperty.FS_REV);
 			}
 
-			if (pendingChanges.TS !== undefined) {
+			if (pendingChanges.TS !== undefined ) {
 				TS = parseFloat(pendingChanges.TS);
 			} else {
 				TS = parseFloat(originalProperty.TS);
@@ -396,7 +404,7 @@ sap.ui.define([
 				DEV_UT = parseFloat(originalProperty.DEV_UT);
 			}
 
-			if (pendingChanges.DEV_SUP !== undefined) {
+			if (pendingChanges.DEV_SUP !== undefined ) {
 				DEV_SUP = parseFloat(pendingChanges.DEV_SUP);
 			} else {
 				DEV_SUP = parseFloat(originalProperty.DEV_SUP);
