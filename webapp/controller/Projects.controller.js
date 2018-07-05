@@ -134,15 +134,19 @@ sap.ui.define([
 		 * @function
 		 * @public
 		 */
+		 
 		onDelete: function() {
 			var that = this;
-			var sPath, sObjectHeader, sQuestion,
+			var sPath, sObjectHeaderFrice, sObjectHeaderComplexity,sQuestion,
 				oViewModel = this.getModel("appView");
-			this.byId("multiselectTable").getSelectedItems().forEach(function(element) {
+				this.byId("multiselectTable").getSelectedItems().forEach(function(element) {
 
 				sPath = element.getBindingContextPath();
-				sObjectHeader = element.getBindingContext().getProperty("FRICE");
-				sQuestion = that._oResourceBundle.getText("deleteText", sObjectHeader);
+				sObjectHeaderFrice = element.getBindingContext().getProperty("FRICE");
+	
+					sObjectHeaderComplexity = element.getBindingContext().getProperty("COMPLEXITY");
+
+				sQuestion = that._oResourceBundle.getText("deleteText", sObjectHeaderFrice + " " + sObjectHeaderComplexity);
 
 				that._confirmDeletionByUser({
 					question: sQuestion
